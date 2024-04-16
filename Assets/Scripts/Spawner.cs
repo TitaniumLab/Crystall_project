@@ -1,3 +1,5 @@
+using Dropper.Animator;
+using Dropper.Model;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -8,19 +10,18 @@ public class Spawner : MonoBehaviour
     [SerializeField] private UnitBundleData _unitBundleData;
     private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
     [SerializeField] private int _spawnCounter = 0;
-    //[SerializeField] private Transform _previewPoint;
-    private IDropper _dropController;
-    private IAnim _anim;
+
+    private DropModel _dropModel;
+    private DropAnimator _dropAnimator;
 
     [Inject]
-    private void Constructor(IDropper dropper, IAnim anim)
+    private void Construct(DropModel dropModel, DropAnimator dropAnimator)
     {
-        _dropController = dropper;
-        _anim = anim;
-        //_anim.OnDrop += SpawnDroppedUnit;
+        _dropModel = dropModel;
+        _dropAnimator = dropAnimator;
     }
 
-    private void Awake()
+    private void Start()
     {
         foreach (var item in _unitBundleData.UnitData)
         {
@@ -28,10 +29,20 @@ public class Spawner : MonoBehaviour
             _pools.Add(pool);
         }
 
+        //get first unit
         Unit unit = _pools[1].Get();
-        _dropController.GetUnit(unit);
+
+        _dropModel.GetUnit(unit);
+
+        _dropAnimator.OnDropEnd += NextDroppedUnit;
     }
 
+    private void NextDroppedUnit()
+    {
+        Unit unit = _pools[1].Get();
+        unit.SetIndexNum(_spawnCounter);
+        _dropModel.GetUnit(unit);
+    }
     //private void SpawnDroppedUnit()
     //{
     //    int unitID = 1;

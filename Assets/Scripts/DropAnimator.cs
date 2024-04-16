@@ -19,8 +19,8 @@ public class sDropAnimator : MonoBehaviour, IAnim
     private void Constructor(IDropper dropper)
     {
         _dropper = dropper;
-        _dropper.OnMove += GoTo;
-        _dropper.OnRelease += GoToAsync;
+        //_dropper.OnMove += GoTo;
+        //_dropper.OnRelease += GoToAsync;
     }
 
     private void GoTo(Transform transform, Vector3 position)

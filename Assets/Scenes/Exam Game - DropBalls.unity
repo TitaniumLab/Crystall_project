@@ -813,7 +813,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 658352859}
-  - component: {fileID: 658352858}
+  - component: {fileID: 658352860}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -821,21 +821,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &658352858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 658352857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58e77e53e6f7e7e4780267a9dc97f620, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unitBundleData: {fileID: 11400000, guid: f3b5df51983827245899e5b7041dffb7, type: 2}
-  _spawnCounter: 0
-  _previewPoint: {fileID: 1893840027}
 --- !u!4 &658352859
 Transform:
   m_ObjectHideFlags: 0
@@ -851,6 +836,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 206020705}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &658352860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658352857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e77e53e6f7e7e4780267a9dc97f620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitBundleData: {fileID: 11400000, guid: f3b5df51983827245899e5b7041dffb7, type: 2}
+  _spawnCounter: 0
 --- !u!1 &679139452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1010,7 @@ GameObject:
   - component: {fileID: 983556605}
   - component: {fileID: 983556606}
   m_Layer: 0
-  m_Name: SceneInstaller
+  m_Name: SpawnerInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1041,10 +1040,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 983556604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e15ce5ffa19aca42983b3dfd9c9e6c3, type: 3}
+  m_Script: {fileID: 11500000, guid: fbab6acab6ffea241be3682ee1a98449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dropController: {fileID: 1999612298}
+  _dropModel: {fileID: 1999612299}
+  _dropAnimator: {fileID: 1999612297}
 --- !u!1 &1058821516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1791,10 +1791,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1999612296}
+  - component: {fileID: 1999612299}
   - component: {fileID: 1999612298}
   - component: {fileID: 1999612297}
   m_Layer: 0
-  m_Name: DropController
+  m_Name: Dropper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1824,11 +1825,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1999612295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c95f0056c7958b48baa4ba21138647e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dc6413692c98d641bb944bd06b42acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dragDuration: 0.4
-  _dropDelay: 2
+  _appearDuration: 0.5
+  _moveDelay: 0.5
+  _dropDelay: 0.1
 --- !u!114 &1999612298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1838,10 +1840,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1999612295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed8082fe3a60f0d46bf324057cb5767e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bfba2efd8107f342b60ef30c5d57cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dorpHeight: 5.5
+--- !u!114 &1999612299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999612295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d296c0ac170df5a49807519f06a74178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <CurrentUnitTransform>k__BackingField: {fileID: 0}
+  _appearPoint: {fileID: 1893840027}
+  _dropHeight: 5.5
   _leftBorder: {fileID: 562267675}
   _leftBorderOffset: 0.1
   _rightBorder: {fileID: 1548198464}
@@ -2044,7 +2060,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

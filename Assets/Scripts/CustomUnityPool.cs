@@ -29,7 +29,7 @@ public class CustomUnityPool
     private Unit CreateUnit()
     {
         var unit = Object.Instantiate(_unitPrefab, _parentTransform);
-        unit.SetPool(_pool);
+        unit.GetComponent<Unit>().SetPool(_pool);
         return unit;
     }
 
