@@ -1,10 +1,9 @@
-using Dropper.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dropper.Controller
+namespace CrystalProject.Dropper
 {
     [RequireComponent(typeof(DropModel))]
     public class DropController : MonoBehaviour, IDropHandler

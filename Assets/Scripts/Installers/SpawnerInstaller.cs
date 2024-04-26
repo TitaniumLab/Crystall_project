@@ -1,21 +1,20 @@
-using Dropper.Animator;
-using Dropper.Controller;
-using Dropper.Model;
-using System.Runtime.CompilerServices;
+using CrystalProject.Dropper;
 using UnityEngine;
 using Zenject;
 
-namespace Installers.Spawner
+namespace CrystalProject.Installers
 {
     public class SpawnerInstaller : MonoInstaller
     {
         [SerializeField] private DropModel _dropModel;
         [SerializeField] private DropAnimator _dropAnimator;
+        [SerializeField] private ScoreModel _scoreModel;
 
         public override void InstallBindings()
         {
             Container.Bind<DropModel>().FromInstance(_dropModel);
             Container.Bind<DropAnimator>().FromInstance(_dropAnimator);
+            Container.Bind<ScoreModel>().FromInstance(_scoreModel);
         }
     }
 }

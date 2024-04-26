@@ -1,13 +1,9 @@
 using DG.Tweening;
-using Dropper.Model;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
-namespace Dropper.Animator
+namespace CrystalProject.Dropper
 {
     [RequireComponent(typeof(IDropHandler))]
     public class DropAnimator : MonoBehaviour

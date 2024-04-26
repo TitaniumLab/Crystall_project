@@ -1,68 +1,82 @@
-using Dropper.Animator;
-using Dropper.Model;
+using CrystalProject.Dropper;
+using CrystalProject.Units;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
-public class Spawner : MonoBehaviour
+namespace CrystalProject
 {
-    [SerializeField] private UnitBundleData _unitBundleData;
-    private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
-    [SerializeField] private int _spawnCounter = 0;
-
-    private DropModel _dropModel;
-    private DropAnimator _dropAnimator;
-
-    [Inject]
-    private void Construct(DropModel dropModel, DropAnimator dropAnimator)
+    public class Spawner : MonoBehaviour
     {
-        _dropModel = dropModel;
-        _dropAnimator = dropAnimator;
-    }
+        [SerializeField] private UnitBundleData _unitBundleData;
+        private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
+        [SerializeField] private int _spawnCounter = 0;
 
-    private void Start()
-    {
-        foreach (var item in _unitBundleData.UnitData)
+        private DropModel _dropModel;
+        private DropAnimator _dropAnimator;
+        private ScoreModel _scoreModel;
+        public static event Action<int> OnSpawn;
+
+        [Inject]
+        private void Construct(DropModel dropModel, DropAnimator dropAnimator, ScoreModel scoreModel)
         {
-            CustomUnityPool pool = new CustomUnityPool(item.Unit, transform);
-            _pools.Add(pool);
+            _dropModel = dropModel;
+            _dropAnimator = dropAnimator;
+            _scoreModel = scoreModel;
         }
 
-        //get first unit
-        Unit unit = _pools[1].Get();
+        private void Start()
+        {
+            int length = _unitBundleData.UnitData.Length;
+            for (int i = 0; i < length; i++)
+            {
+                bool isLastPool;
+                if (i < length - 1)
+                    isLastPool = false;
+                else
+                    isLastPool = true;
+                CustomUnityPool pool = new CustomUnityPool(_unitBundleData.UnitData[i].Unit, transform, i, isLastPool);
+                _pools.Add(pool);
+            }
 
-        _dropModel.GetUnit(unit);
+            Unit.OnÑombine += NextCombinedUnit;
+            _dropAnimator.OnDropEnd += NextDroppedUnit;
 
-        _dropAnimator.OnDropEnd += NextDroppedUnit;
-    }
+            NextDroppedUnit();
+        }
 
-    private void NextDroppedUnit()
-    {
-        Unit unit = _pools[1].Get();
-        unit.SetIndexNum(_spawnCounter);
-        _dropModel.GetUnit(unit);
-    }
-    //private void SpawnDroppedUnit()
-    //{
-    //    int unitID = 1;
-    //    var unit = _pools[unitID].Get();
-    //    unit.transform.position = _previewPoint.position;
-    //    var previewUnit = unit.GetComponent<Previewable>();
-    //    _dropController.GetUnit(previewUnit);
-    //}
+        private void NextDroppedUnit()
+        {
+            int randomTier = GetUnitTier();
+            Unit unit = GetUnit(randomTier);
+            _dropModel.GetUnit(unit);
+        }
 
-    //private Unit SpawnUnit(int unitID)
-    //{
+        private void NextCombinedUnit(Vector3 pos, int tier)
+        {
+            Unit unit = GetUnit(tier);
+            unit.transform.position = pos;
+        }
+        private int GetUnitTier()
+        {
+            List<UnitData> unitsData = new List<UnitData>();
+            foreach (var item in _unitBundleData.UnitData)
+                if (item.CanBeDropped && _scoreModel.Score >= item.ScoreToDrop)
+                    unitsData.Add(item);
+            return Random.Range(0, unitsData.Count);
+        }
 
-    //    var unitToSpawn = _unitBundleData.UnitData[unitID].Unit;
-    //    var spawnedUnit = Instantiate(unitToSpawn, position, unitToSpawn.transform.rotation, this.transform);
-    //    return spawnedUnit;
-    //}
-
-
-    private void GetRandomUnit()
-    {
-
+        private Unit GetUnit(int tier)
+        {
+            Unit unit = _pools[tier].Get();
+            unit.SetIndexNum(_spawnCounter);
+            Debug.Log($"Unit ¹{_spawnCounter} spawned.");
+            _spawnCounter++;
+            OnSpawn(_unitBundleData.UnitData[tier].ScoreOnSpawn);
+            return unit;
+        }
     }
 }
+

@@ -11,13 +11,11 @@ GameObject:
   - component: {fileID: 3512019702688018803}
   - component: {fileID: 8482047517957053571}
   - component: {fileID: 4804835016435875122}
-  - component: {fileID: 4629455109235038244}
   - component: {fileID: 7678823389512823933}
   - component: {fileID: 8169043201869902069}
   - component: {fileID: 5875782036060168340}
   - component: {fileID: 1159068423312573704}
   - component: {fileID: -6785259465040961502}
-  - component: {fileID: -5709402745869927103}
   m_Layer: 0
   m_Name: Obj. level_ 7
   m_TagString: Crystal
@@ -90,23 +88,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4629455109235038244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6893195795782376289}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86fa982fbf0e05e448d294bb5d0f42cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnManager: {fileID: 0}
-  contactedObj: []
-  objNumber: 0
-  objID: 6
-  scoreToAdd: 128
 --- !u!54 &7678823389512823933
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4965,15 +4946,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb3e42bd61006d49a8586c124756f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-5709402745869927103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6893195795782376289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e9c33b659ee2934aa16e01da84d8b80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  <IndexNum>k__BackingField: 0
+  <ContactUnit>k__BackingField: []

@@ -1,9 +1,8 @@
+using CrystalProject.Units;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dropper.Model
+namespace CrystalProject.Dropper
 {
     public class DropModel : MonoBehaviour
     {
