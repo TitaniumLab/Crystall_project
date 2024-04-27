@@ -1,32 +1,12 @@
-using System;
 using UnityEngine;
-using Zenject;
 
-public class UnitLossArea : MonoBehaviour
+public class UnitLossArea : MonoBehaviour, ILossCount, ILossSender
 {
-    [SerializeField] private float _timeInZone;
-    [SerializeField] private bool _inLossZone = false;
-    public static event Action<float> OnLossTimeChange;
+    public void StartCount()=>
+        _isCount = true;
 
-
-    private void OnTriggerEnter(Collider other)
+    public void StopCount()
     {
-        _inLossZone = true;
+        ILossSender.Invoke(_timer);
     }
-    private void OnTriggerExit(Collider other)
-    {
-        _inLossZone = false;
-        _timeInZone = 0;
-    }
-
-    private void Update()
-    {
-        if (_inLossZone)
-        {
-            _timeInZone += Time.deltaTime;
-            OnLossTimeChange(_timeInZone);
-        }
-    }
-
-
 }

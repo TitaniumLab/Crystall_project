@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 namespace CrystalProject
@@ -61,11 +62,12 @@ namespace CrystalProject
         }
         private int GetUnitTier()
         {
-            List<UnitData> unitsData = new List<UnitData>();
-            foreach (var item in _unitBundleData.UnitData)
-                if (item.CanBeDropped && _scoreModel.Score >= item.ScoreToDrop)
-                    unitsData.Add(item);
-            return Random.Range(0, unitsData.Count);
+            List<int> tiers = new List<int>();
+            for (int i = 0; i < _unitBundleData.UnitData.Length; i++)
+                if (_unitBundleData.UnitData[i].CanBeDropped && _scoreModel.Score >= _unitBundleData.UnitData[i].ScoreToDrop)
+                    tiers.Add(i);
+            int index = Random.Range(0, tiers.Count);
+            return tiers[index];
         }
 
         private Unit GetUnit(int tier)

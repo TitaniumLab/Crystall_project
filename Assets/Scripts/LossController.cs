@@ -1,21 +1,25 @@
-using System;
 using UnityEngine;
-using Zenject;
+using UnityEngine.UI;
 
 public class LossController : MonoBehaviour
 {
-    [field: SerializeField] public Transform _lossBorder { get; private set; }
-    [field: SerializeField] public float LossDelay { get; private set; }
+    [SerializeField] private float _lossDelay;
+    [SerializeField] private Slider _slider; //slider for debugging------------
+    [SerializeField] private float _maxTime;
+    [SerializeField] private float _counterDecreaseMulti;
+    [SerializeField] private float _counterIncreaseMulti;
 
     private void Awake()
     {
-        UnitLossArea.OnLossTimeChange += CheckLoss;
-    }
+        ILossSender.LossCountChanged += CheckLoss;
 
+        _slider.maxValue = _lossDelay;//-----------------
+    }
 
     private void CheckLoss(float time)
     {
-
+        if(time == 0 )
+            _maxTime
+        _slider.value = time;//-----------------
     }
-    //public static event Action<float> OnLossTimeChange;
 }

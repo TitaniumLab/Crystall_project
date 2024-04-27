@@ -39,23 +39,6 @@ namespace CrystalProject.Units
             unit.GetComponent<Unit>().SetPool(this);
             return unit;
         }
-        //------------------------
-
-        //[Inject]
-        //private DiContainer _container;
-
-
-        //private Unit CreateUnit()
-        //{
-        //    //Unit unit = _container.InstantiatePrefab(_unitPrefab, _parentTransform).GetComponent<Unit>();
-        //    var unit = Object.Instantiate(_unitPrefab, _parentTransform);
-        //    unit.GetComponent<Unit>().SetPool(this);
-        //    return unit;
-        //}
-        //----------------------
-
-
-
 
         private void GetUnit(Unit unit) =>
             unit.gameObject.SetActive(true);
