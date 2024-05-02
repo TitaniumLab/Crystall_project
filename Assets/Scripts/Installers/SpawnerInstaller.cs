@@ -1,8 +1,9 @@
 using CrystalProject.Dropper;
+using CrystalProject.Score;
 using UnityEngine;
 using Zenject;
 
-namespace CrystalProject.Installers
+namespace CrystalProject
 {
     public class SpawnerInstaller : MonoInstaller
     {

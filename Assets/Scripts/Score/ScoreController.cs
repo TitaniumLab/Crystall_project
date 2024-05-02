@@ -1,23 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(ScoreModel))]
-public class ScoreController : MonoBehaviour
+namespace CrystalProject.Score
 {
-    [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
-    [SerializeField] private string _scoreText = "Score: ";
-    private ScoreModel _scoreModel;
-
-
-    private void Awake()
+    [RequireComponent(typeof(ScoreModel))]
+    public class ScoreController : MonoBehaviour
     {
-        _scoreModel = GetComponent<ScoreModel>();
-        _scoreModel.OnScoreChange += ChangetScoreText;
-        _scoreTextMeshPro.text = _scoreText;
-    }
+        [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
+        [SerializeField] private string _scoreText = "Score: ";
+        private ScoreModel _scoreModel;
 
-    private void ChangetScoreText(int score)
-    {
-        _scoreTextMeshPro.text = _scoreText + score;
+        private void Awake()
+        {
+            _scoreModel = GetComponent<ScoreModel>();
+            _scoreModel.OnScoreChange += ChangetScoreText;
+            _scoreTextMeshPro.text = _scoreText;
+        }
+
+        private void ChangetScoreText(int score)
+        {
+            _scoreTextMeshPro.text = _scoreText + score;
+        }
     }
 }

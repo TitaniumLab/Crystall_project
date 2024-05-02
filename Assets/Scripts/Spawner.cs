@@ -1,10 +1,10 @@
 using CrystalProject.Dropper;
+using CrystalProject.Score;
 using CrystalProject.Units;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 namespace CrystalProject

@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-using Zenject;
-using Zenject.SpaceFighter;
 
 namespace CrystalProject.Units
 {

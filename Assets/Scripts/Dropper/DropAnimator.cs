@@ -21,7 +21,6 @@ namespace CrystalProject.Dropper
         {
             _dropHandler = GetComponent<IDropHandler>();
             _dropHandler.OnAppear += AppearAnimation;
-            //DropModel.OnUnitGet += AppearAnimation;
             _dropHandler.OnMove += MoveTo;
             _dropHandler.OnDrop += Drop;
         }
