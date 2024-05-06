@@ -9,6 +9,7 @@ namespace CrystalProject.Dropper
         private Unit _currentUnit;
         [field: SerializeField] public Transform CurrentUnitTransform { get; private set; }
         [SerializeField] private Transform _appearPoint;
+        [SerializeField] private float _zDropPos;
         [SerializeField] private float _dropHeight;
         [SerializeField] private Transform _leftBorder;
         [SerializeField] private float _leftBorderOffset;
@@ -21,9 +22,9 @@ namespace CrystalProject.Dropper
             _currentUnit?.DisablePreviewState();
             _currentUnit = unit;
             _currentUnit.EnablePreviewState();
-            CurrentUnitTransform = _currentUnit.GetComponent<Transform>();
+            CurrentUnitTransform = _currentUnit.transform;
             CurrentUnitTransform.position = _appearPoint.position;
-            OnUnitGet(CurrentUnitTransform);
+            OnUnitGet?.Invoke(CurrentUnitTransform);
         }
 
         public Vector3 GetDropPosition()
@@ -35,7 +36,7 @@ namespace CrystalProject.Dropper
                 xPos = leftBorder;
             else if (xPos > rightBorder)
                 xPos = rightBorder;
-            Vector3 dropPoint = new Vector3(xPos, _dropHeight, 0);
+            Vector3 dropPoint = new Vector3(xPos, _dropHeight, _zDropPos);
             return dropPoint;
         }
     }

@@ -2531,6 +2531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _appearDuration: 0.5
+  _appearStartSize: {x: 0, y: 0, z: 0}
   _moveDelay: 0.5
   _dropDelay: 0.1
 --- !u!114 &1999612298
@@ -2545,6 +2546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfba2efd8107f342b60ef30c5d57cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mouseButtonIndex: 0
 --- !u!114 &1999612299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2559,6 +2561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CurrentUnitTransform>k__BackingField: {fileID: 0}
   _appearPoint: {fileID: 1893840027}
+  _zDropPos: 0
   _dropHeight: 5.5
   _leftBorder: {fileID: 562267675}
   _leftBorderOffset: 0.1
@@ -2763,7 +2766,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.9333334
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

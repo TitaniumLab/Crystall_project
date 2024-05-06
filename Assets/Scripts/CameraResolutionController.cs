@@ -9,7 +9,7 @@ namespace CrystalProject
         [SerializeField] private float _targetWidth;
         [SerializeField] private float _targetViewSize;
 
-        private void OnValidate()
+        private void Start()
         {
             _defaultViewSize = Camera.main.orthographicSize;
             float currentSize = Screen.width / Screen.height * Camera.main.orthographicSize;

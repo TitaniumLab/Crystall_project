@@ -7,31 +7,41 @@ namespace CrystalProject.Dropper
     public class DropController : MonoBehaviour, IDropHandler
     {
         private DropModel _dropModel;
+        [SerializeField] private int _mouseButtonIndex;
         public event Action<Transform> OnAppear;
         public event Action<Transform, Vector3> OnMove;
         public event Action<Transform, Vector3> OnDrop;
 
         private void Awake()
         {
-            _dropModel = GetComponent<DropModel>();
+            if (TryGetComponent(out DropModel dropModel))
+                _dropModel = dropModel;
+            else
+                throw new Exception($"Missing {typeof(DropModel).Name} component.");
+
             _dropModel.OnUnitGet += OnAppear;
+        }
+
+        private void OnDestroy()
+        {
+            _dropModel.OnUnitGet -= OnAppear;
         }
 
         private void FixedUpdate()
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 var dropPos = _dropModel.GetDropPosition();
-                OnMove(_dropModel.CurrentUnitTransform, dropPos);
+                OnMove?.Invoke(_dropModel.CurrentUnitTransform, dropPos);
             }
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(_mouseButtonIndex))
             {
                 var dropPos = _dropModel.GetDropPosition();
-                OnDrop(_dropModel.CurrentUnitTransform, dropPos);
+                OnDrop?.Invoke(_dropModel.CurrentUnitTransform, dropPos);
             }
         }
     }
