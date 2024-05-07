@@ -1,4 +1,3 @@
-using CrystalProject.Loss;
 namespace CrystalProject.Loss
 {
     public class LossStateMachine

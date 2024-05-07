@@ -9,16 +9,15 @@ using Random = UnityEngine.Random;
 
 namespace CrystalProject
 {
-    public class Spawner : MonoBehaviour
+    public class UnitController : MonoBehaviour
     {
         [SerializeField] private UnitBundleData _unitBundleData;
-        private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
-        [SerializeField] private int _spawnCounter = 0;
+        private UnitFactory _unitFactory;
 
         private DropModel _dropModel;
         private DropAnimator _dropAnimator;
         private ScoreModel _scoreModel;
-        public static event Action<int> OnSpawn;
+        public static event Action<int> ScoreOnCombine;
 
         [Inject]
         private void Construct(DropModel dropModel, DropAnimator dropAnimator, ScoreModel scoreModel)
@@ -30,17 +29,7 @@ namespace CrystalProject
 
         private void Start()
         {
-            int length = _unitBundleData.UnitData.Length;
-            for (int i = 0; i < length; i++)
-            {
-                bool isLastPool;
-                if (i < length - 1)
-                    isLastPool = false;
-                else
-                    isLastPool = true;
-                CustomUnityPool pool = new CustomUnityPool(_unitBundleData.UnitData[i].Unit, transform, i, isLastPool);
-                _pools.Add(pool);
-            }
+            _unitFactory = new UnitFactory(_unitBundleData.UnitData, transform);
 
             Unit.OnÑombine += NextCombinedUnit;
             _dropAnimator.OnDropEnd += NextDroppedUnit;
@@ -48,18 +37,26 @@ namespace CrystalProject
             NextDroppedUnit();
         }
 
+        private void OnDestroy()
+        {
+            Unit.OnÑombine -= NextCombinedUnit;
+            _dropAnimator.OnDropEnd -= NextDroppedUnit;
+        }
+
         private void NextDroppedUnit()
         {
             int randomTier = GetUnitTier();
-            Unit unit = GetUnit(randomTier);
+            Unit unit = _unitFactory.GetUnit(randomTier);
             _dropModel.GetUnit(unit);
         }
 
         private void NextCombinedUnit(Vector3 pos, int tier)
         {
-            Unit unit = GetUnit(tier);
+            Unit unit = _unitFactory.GetUnit(tier);
             unit.transform.position = pos;
+            ScoreOnCombine(_unitBundleData.UnitData[tier].ScoreOnCombine);
         }
+
         private int GetUnitTier()
         {
             List<int> tiers = new List<int>();
@@ -68,16 +65,6 @@ namespace CrystalProject
                     tiers.Add(i);
             int index = Random.Range(0, tiers.Count);
             return tiers[index];
-        }
-
-        private Unit GetUnit(int tier)
-        {
-            Unit unit = _pools[tier].Get();
-            unit.SetIndexNum(_spawnCounter);
-            Debug.Log($"Unit ¹{_spawnCounter} spawned.");
-            _spawnCounter++;
-            OnSpawn(_unitBundleData.UnitData[tier].ScoreOnSpawn);
-            return unit;
         }
     }
 }

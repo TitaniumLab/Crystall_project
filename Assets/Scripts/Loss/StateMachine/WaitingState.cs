@@ -6,7 +6,7 @@ namespace CrystalProject.Loss
 
         public override void LogicUpdate()
         {
-            if (_lossController.IncreasingValue != 0)
+            if (_lossController.IncrementerValue > _lossController.MinIncrementerValue)
                 _stateMachine.ChangetState(_lossController.UnstableState);
         }
     }

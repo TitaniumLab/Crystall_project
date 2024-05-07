@@ -10,7 +10,12 @@ namespace CrystalProject.Score
 
         private void Awake()
         {
-            Spawner.OnSpawn += AddScore;
+            UnitController.ScoreOnCombine += AddScore;
+        }
+
+        private void OnDestroy()
+        {
+            UnitController.ScoreOnCombine -= AddScore;
         }
 
         private void AddScore(int score)

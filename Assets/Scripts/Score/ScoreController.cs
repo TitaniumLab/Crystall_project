@@ -13,8 +13,18 @@ namespace CrystalProject.Score
         private void Awake()
         {
             _scoreModel = GetComponent<ScoreModel>();
+            //if (TryGetComponent(out ScoreModel scoreModel))
+            //    _scoreModel = scoreModel;
+            //else
+            //    throw new Exception($"Missing ");
+
             _scoreModel.OnScoreChange += ChangetScoreText;
             _scoreTextMeshPro.text = _scoreText;
+        }
+
+        private void OnDestroy()
+        {
+            _scoreModel.OnScoreChange -= ChangetScoreText;
         }
 
         private void ChangetScoreText(int score)

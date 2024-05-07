@@ -6,9 +6,9 @@ namespace CrystalProject.Loss
 
         public override void LogicUpdate()
         {
-            if (_lossController.CurrentValue == 0)
+            if (_lossController.CurrentValue == _lossController.MinCurrentValue)
                 _stateMachine.ChangetState(_lossController.WaitingState);
-            else if (_lossController.CurrentValue >= _lossController.LossDelay)
+            else if (_lossController.CurrentValue >= _lossController.LossDelayValue)
                 _stateMachine.ChangetState(_lossController.LossState);
         }
 

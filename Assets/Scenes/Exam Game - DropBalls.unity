@@ -959,7 +959,7 @@ GameObject:
   - component: {fileID: 658352859}
   - component: {fileID: 658352860}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: Unit Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -993,7 +993,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitBundleData: {fileID: 11400000, guid: f3b5df51983827245899e5b7041dffb7, type: 2}
-  _spawnCounter: 0
 --- !u!1 &679139452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,9 +1912,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a057dc93f5a1f434e9e30dce5a6fb605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <LossDelay>k__BackingField: 3
+  <LossDelayValue>k__BackingField: 3
   <CurrentValue>k__BackingField: 0
-  <IncreasingValue>k__BackingField: 0
+  <MinCurrentValue>k__BackingField: 0
+  <IncrementerValue>k__BackingField: 0
+  <MinIncrementerValue>k__BackingField: 0
   <DecreasingValue>k__BackingField: 1
   <Slider>k__BackingField: {fileID: 991144760}
 --- !u!1 &1548198463

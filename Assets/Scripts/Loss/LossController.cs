@@ -5,9 +5,11 @@ namespace CrystalProject.Loss
 {
     public class LossController : MonoBehaviour
     {
-        [field: SerializeField] public float LossDelay { get; private set; }
+        [field: SerializeField] public float LossDelayValue { get; private set; }
         [field: SerializeField] public float CurrentValue { get; private set; }
-        [field: SerializeField] public float IncreasingValue { get; private set; }
+        [field: SerializeField] public float MinCurrentValue { get; private set; }
+        [field: SerializeField] public float IncrementerValue { get; private set; }
+        [field: SerializeField] public float MinIncrementerValue { get; private set; }
         [field: SerializeField] public float DecreasingValue { get; private set; } = 1;
         [field: SerializeField] public Slider Slider { get; private set; } //the slider will be replaced with a separate functionality-----------
 
@@ -16,7 +18,7 @@ namespace CrystalProject.Loss
         public UnstableState UnstableState { get; private set; }
         public LossState LossState { get; private set; }
 
-
+        #region MonoBeh
         private void Awake()
         {
             ILossSender.LossCountChanged += ChangeLossIncrementer;
@@ -27,7 +29,12 @@ namespace CrystalProject.Loss
             LossState = new LossState(this, _stateMachine);
             _stateMachine.Initialize(WaitingState);
 
-            Slider.maxValue = LossDelay;
+            Slider.maxValue = LossDelayValue;
+        }
+
+        private void OnDestroy()
+        {
+            ILossSender.LossCountChanged -= ChangeLossIncrementer;
         }
 
         private void FixedUpdate()
@@ -35,19 +42,21 @@ namespace CrystalProject.Loss
             _stateMachine.CurrentState.LogicUpdate();
             _stateMachine.CurrentState.BehaviorUpdate();
         }
+        #endregion
 
+        #region Methods
         private void ChangeLossIncrementer(float value) =>
-            IncreasingValue += value;
+            IncrementerValue += value;
 
         public void ChangeValue()
         {
-            if (IncreasingValue > 0)
-                CurrentValue += Time.fixedDeltaTime * IncreasingValue;
+            if (IncrementerValue > MinIncrementerValue)
+                CurrentValue += Time.fixedDeltaTime * IncrementerValue;
             else
             {
                 CurrentValue -= Time.fixedDeltaTime * DecreasingValue;
-                if (CurrentValue < 0)
-                    CurrentValue = 0;
+                if (CurrentValue < MinCurrentValue)
+                    CurrentValue = MinCurrentValue;
             }
             Slider.value = CurrentValue;
         }
@@ -56,5 +65,6 @@ namespace CrystalProject.Loss
         {
             Time.timeScale = 0;
         }
+        #endregion
     }
 }

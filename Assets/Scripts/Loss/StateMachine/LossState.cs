@@ -4,9 +4,7 @@ namespace CrystalProject.Loss
     {
         public LossState(LossController lossController, LossStateMachine lossStateMachine) : base(lossController, lossStateMachine) { }
 
-        public override void Enter()
-        {
+        public override void Enter() =>
             _lossController.TriggerLoss();
-        }
     }
 }
