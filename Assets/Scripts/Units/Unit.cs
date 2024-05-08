@@ -9,9 +9,10 @@ namespace CrystalProject.Units
     public class Unit : MonoBehaviour
     {
         [field: SerializeField] public int IndexNum { get; private set; }
+       [SerializeField] private int _minUnitsToCombine = 1;
+        [SerializeField] private int _tierIncreminator = 1;
         public List<Unit> ContactUnit { get; private set; } = new List<Unit>();
         private CustomUnityPool _pool;
-        private Collider _collider;
         private Rigidbody _rb;
         private Quaternion _defaultRotation;
         public static event Action<Vector3, int> On—ombine;
@@ -26,18 +27,18 @@ namespace CrystalProject.Units
 
         private void Update()
         {
-            if (ContactUnit.Count > 0)
+            if (ContactUnit.Count >= _minUnitsToCombine)
             {
-                if (ContactUnit.Count == 1 && ContactUnit[0].ContactUnit.Count < 2) //dont combine if contacted unit have more then 1 cotacts
+                if (ContactUnit.Count == _minUnitsToCombine && ContactUnit[0].ContactUnit.Count <= _minUnitsToCombine) //dont combine if contacted unit have more then _minUnitsToCombine cotacts
                 {
                     if (IndexNum > ContactUnit[0].IndexNum)
                     {
                         Vector3 pos = (ContactUnit[0].transform.position + transform.position) / 2;
-                        On—ombine(pos, _pool.Tier + 1);
+                        On—ombine(pos, _pool.Tier + _tierIncreminator);
                     }
                     _pool.Release(this);
                 }
-                else if (ContactUnit.Count > 1)
+                else if (ContactUnit.Count > _minUnitsToCombine)
                 {
                     int otherIndex = ContactUnit[0].IndexNum;
                     int count = 0;
@@ -50,7 +51,7 @@ namespace CrystalProject.Units
                         }
                     }
                     Vector3 pos = (ContactUnit[count].transform.position + transform.position) / 2;
-                    On—ombine(pos, _pool.Tier + 1);
+                    On—ombine(pos, _pool.Tier + _tierIncreminator);
                     _pool.Release(this);
                     _pool.Release(ContactUnit[count]);
                 }
@@ -69,33 +70,16 @@ namespace CrystalProject.Units
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
-            _collider = GetComponent<Collider>();
             _defaultRotation = transform.rotation;
         }
         #endregion
 
         #region Methods
-        public void SetPool(CustomUnityPool pool)
-        {
+        public void SetPool(CustomUnityPool pool) =>
             _pool = pool;
-        }
 
-        public void SetIndexNum(int index)
-        {
+        public void SetIndexNum(int index) =>
             IndexNum = index;
-        }
-
-        public void EnablePreviewState()
-        {
-            _collider.enabled = false;
-            _rb.useGravity = false;
-        }
-
-        public void DisablePreviewState()
-        {
-            _collider.enabled = true;
-            _rb.useGravity = true;
-        }
         #endregion
     }
 }

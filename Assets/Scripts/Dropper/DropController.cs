@@ -14,10 +14,8 @@ namespace CrystalProject.Dropper
 
         private void Awake()
         {
-            if (TryGetComponent(out DropModel dropModel))
-                _dropModel = dropModel;
-            else
-                throw new Exception($"Missing {typeof(DropModel).Name} component.");
+            if (TryGetComponent(out DropModel dropModel)) _dropModel = dropModel;
+            else throw new Exception($"Missing {typeof(DropModel).Name} component.");
 
             _dropModel.OnUnitGet += OnAppear;
         }

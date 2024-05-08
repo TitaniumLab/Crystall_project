@@ -2810,6 +2810,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbecb9fc35472de42aad14f5e02e438f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minTargetAspectRatio: {x: 9, y: 16}
+  _maxTargetAspectRatio: {x: 9, y: 19.5}
+  rectCenter: {x: 0.5, y: 0.5}
   _targetWidth: 3.7
   _targetViewSize: 5
 --- !u!1660057539 &9223372036854775807

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System;
 
 namespace CrystalProject.Score
 {
@@ -12,11 +13,8 @@ namespace CrystalProject.Score
 
         private void Awake()
         {
-            _scoreModel = GetComponent<ScoreModel>();
-            //if (TryGetComponent(out ScoreModel scoreModel))
-            //    _scoreModel = scoreModel;
-            //else
-            //    throw new Exception($"Missing ");
+            if (TryGetComponent(out ScoreModel scoreModel)) _scoreModel = scoreModel;
+            else throw new Exception($"Missing {typeof(ScoreModel).Name} component.");
 
             _scoreModel.OnScoreChange += ChangetScoreText;
             _scoreTextMeshPro.text = _scoreText;

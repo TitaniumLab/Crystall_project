@@ -27,7 +27,6 @@ public class UnitFactory
         unit.SetIndexNum(_counter);
         Debug.Log($"Unit ¹{_counter} spawned.");
         _counter++;
-        //OnSpawn(_unitBundleData.UnitData[tier].ScoreOnSpawn);
         return unit;
     }
 }

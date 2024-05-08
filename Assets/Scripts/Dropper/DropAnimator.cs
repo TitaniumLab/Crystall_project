@@ -20,10 +20,8 @@ namespace CrystalProject.Dropper
 
         private void Awake()
         {
-            if (TryGetComponent(out IDropHandler dropHandler))
-                _dropHandler = dropHandler;
-            else
-                throw new Exception($"Missing {typeof(IDropHandler).Name} component.");
+            if (TryGetComponent(out IDropHandler dropHandler)) _dropHandler = dropHandler;
+            else throw new Exception($"Missing {typeof(IDropHandler).Name} component.");
 
             _dropHandler.OnAppear += AppearAnimation;
             _dropHandler.OnMove += MoveTo;

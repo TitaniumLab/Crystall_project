@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6249879148312653905}
   - component: {fileID: 6975086711526266516}
   - component: {fileID: 7791461750959309905}
+  - component: {fileID: 4696095279669996968}
   m_Layer: 0
   m_Name: Obj. level_ 8
   m_TagString: Crystal
@@ -149,6 +150,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <IndexNum>k__BackingField: 0
+--- !u!114 &4696095279669996968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984475629060639810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6016fa142b0e7248abb369aa79c28aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5388672553969330732
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ namespace CrystalProject.Dropper
 {
     public class DropModel : MonoBehaviour
     {
-        private Unit _currentUnit;
+        private IPreview _currentUnitPreview;
         [field: SerializeField] public Transform CurrentUnitTransform { get; private set; }
         [SerializeField] private Transform _appearPoint;
         [SerializeField] private float _zDropPos;
@@ -17,12 +17,13 @@ namespace CrystalProject.Dropper
         [SerializeField] private float _rightBorderOffset;
         public event Action<Transform> OnUnitGet;
 
-        public void GetUnit(Unit unit)
+        public void GetUnit(Transform unitTransform)
         {
-            _currentUnit?.DisablePreviewState();
-            _currentUnit = unit;
-            _currentUnit.EnablePreviewState();
-            CurrentUnitTransform = _currentUnit.transform;
+            _currentUnitPreview?.DisablePreviewState();
+            CurrentUnitTransform = unitTransform;
+            if (CurrentUnitTransform.TryGetComponent(out IPreview preview)) _currentUnitPreview = preview;
+            else throw new Exception($"Missing {typeof(IPreview).Name} component.");
+            _currentUnitPreview.EnablePreviewState();
             CurrentUnitTransform.position = _appearPoint.position;
             OnUnitGet?.Invoke(CurrentUnitTransform);
         }

@@ -5,7 +5,7 @@ using Zenject;
 
 namespace CrystalProject
 {
-    public class SpawnerInstaller : MonoInstaller
+    public class UnitInstaller : MonoInstaller
     {
         [SerializeField] private DropModel _dropModel;
         [SerializeField] private DropAnimator _dropAnimator;

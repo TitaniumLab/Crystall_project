@@ -47,7 +47,7 @@ namespace CrystalProject
         {
             int randomTier = GetUnitTier();
             Unit unit = _unitFactory.GetUnit(randomTier);
-            _dropModel.GetUnit(unit);
+            _dropModel.GetUnit(unit.transform);
         }
 
         private void NextCombinedUnit(Vector3 pos, int tier)
