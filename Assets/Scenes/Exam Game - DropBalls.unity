@@ -2812,9 +2812,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minTargetAspectRatio: {x: 9, y: 16}
   _maxTargetAspectRatio: {x: 9, y: 19.5}
-  rectCenter: {x: 0.5, y: 0.5}
-  _targetWidth: 3.7
-  _targetViewSize: 5
+  _defaultRectSize: {x: 1, y: 1}
+  _rectCenter: {x: 0.5, y: 0.5}
+  _targetViewSize: 6.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
