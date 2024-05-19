@@ -8,7 +8,7 @@ namespace CrystalProject
         [SerializeField] private Vector2 _maxTargetAspectRatio;
         [SerializeField] private Vector2 _defaultRectSize = new Vector2(1, 1);
         [SerializeField] private Vector2 _rectCenter = new Vector2(0.5f, 0.5f);
-        [SerializeField] private float _targetViewSize = 6.5f;
+        [SerializeField] private float _targetHorizontalViewSize = 4f;
         private float _previousRatio;
 
         private void Start()
@@ -25,14 +25,14 @@ namespace CrystalProject
             }
         }
 
-        private void SetCamera()
+        public void SetCamera()
         {
             _previousRatio = (float)Screen.width / (float)Screen.height;
             Debug.Log($"Current screen ratio: {_previousRatio}.");
 
             if (_previousRatio > _minTargetAspectRatio.x / _minTargetAspectRatio.y)
             {
-                Camera.main.orthographicSize = _targetViewSize;
+                SetRelariveCameraViewSize(_minTargetAspectRatio);
                 float pixelScale = Screen.height / _minTargetAspectRatio.y;
                 float targetWidth = pixelScale * _minTargetAspectRatio.x;
                 float relativeWidth = targetWidth / Screen.width;
@@ -42,7 +42,7 @@ namespace CrystalProject
             }
             else if (_previousRatio < _maxTargetAspectRatio.x / _maxTargetAspectRatio.y)
             {
-                SetRelariveCameraViewSize();
+                SetRelariveCameraViewSize(_maxTargetAspectRatio);
                 float pixelScale = Screen.width / _maxTargetAspectRatio.x;
                 float targetHeight = pixelScale * _maxTargetAspectRatio.y;
                 float relativeHeight = targetHeight / Screen.height;
@@ -52,14 +52,16 @@ namespace CrystalProject
             }
             else
             {
-                SetRelariveCameraViewSize();
+                SetRelariveCameraViewSize(new Vector2(Screen.width, Screen.height));
             }
         }
 
-        private void SetRelariveCameraViewSize()
+        private void SetRelariveCameraViewSize(Vector2 targetRatio)
         {
-            float relativeViewSize = _targetViewSize * (_maxTargetAspectRatio.y / _maxTargetAspectRatio.x) / (_minTargetAspectRatio.y / _minTargetAspectRatio.x);
+
+            float relativeViewSize = targetRatio.y / (targetRatio.x / _targetHorizontalViewSize);
             Camera.main.orthographicSize = relativeViewSize;
+            Debug.Log($"New view size: {relativeViewSize}.");
             Camera.main.rect = new Rect(default, _defaultRectSize) { center = _rectCenter };
         }
     }

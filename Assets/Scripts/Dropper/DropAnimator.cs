@@ -57,8 +57,10 @@ namespace CrystalProject.Dropper
         {
             if (_canBeMoved)
             {
+                _canBeMoved = false;
                 _tween?.Kill(false);
                 await (_tween = unitTransform.DOMove(point, _dropDelay, false)).AsyncWaitForCompletion();
+                _canBeMoved = true;
                 OnDropEnd?.Invoke();
             }
         }
