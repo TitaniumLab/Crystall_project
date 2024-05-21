@@ -9,9 +9,9 @@ namespace CrystalProject.Units
     public class Unit : MonoBehaviour
     {
         [field: SerializeField] public int IndexNum { get; private set; }
-       [SerializeField] private int _minUnitsToCombine = 1;
+        [SerializeField] private int _minUnitsToCombine = 1;
         [SerializeField] private int _tierIncreminator = 1;
-        public List<Unit> ContactUnit { get; private set; } = new List<Unit>();
+        public List<Unit> ContactUnits { get; private set; } = new List<Unit>();
         private CustomUnityPool _pool;
         private Rigidbody _rb;
         private Quaternion _defaultRotation;
@@ -21,41 +21,45 @@ namespace CrystalProject.Units
         #region MonoBeh
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.collider.TryGetComponent(out Unit unit) && gameObject.activeSelf && unit._pool.Tier == _pool.Tier && !ContactUnit.Contains(unit) && !_pool.LastTier)
-                ContactUnit.Add(unit);
+            if (collision.collider.TryGetComponent(out Unit unit) && gameObject.activeSelf && unit._pool.Tier == _pool.Tier && !ContactUnits.Contains(unit) && !_pool.LastTier)
+            {
+                ContactUnits.Add(unit);
+                
+            }
+            Debug.LogWarning(collision.conta);
         }
 
         private void Update()
         {
-            if (ContactUnit.Count >= _minUnitsToCombine)
+            if (ContactUnits.Count >= _minUnitsToCombine)
             {
-                if (ContactUnit.Count == _minUnitsToCombine && ContactUnit[0].ContactUnit.Count <= _minUnitsToCombine) //dont combine if contacted unit have more then _minUnitsToCombine cotacts
+                if (ContactUnits.Count == _minUnitsToCombine && ContactUnits[0].ContactUnits.Count <= _minUnitsToCombine) //dont combine if contacted unit have more then _minUnitsToCombine cotacts
                 {
-                    if (IndexNum > ContactUnit[0].IndexNum)
+                    if (IndexNum > ContactUnits[0].IndexNum)
                     {
-                        Vector3 pos = (ContactUnit[0].transform.position + transform.position) / 2;
+                        Vector3 pos = (ContactUnits[0].transform.position + transform.position) / 2;
                         On—ombine(pos, _pool.Tier + _tierIncreminator);
                     }
                     _pool.Release(this);
                 }
-                else if (ContactUnit.Count > _minUnitsToCombine)
+                else if (ContactUnits.Count > _minUnitsToCombine)
                 {
-                    int otherIndex = ContactUnit[0].IndexNum;
+                    int otherIndex = ContactUnits[0].IndexNum;
                     int count = 0;
-                    for (int i = 1; i < ContactUnit.Count; i++)
+                    for (int i = 1; i < ContactUnits.Count; i++)
                     {
-                        if (otherIndex > ContactUnit[i].IndexNum)
+                        if (otherIndex > ContactUnits[i].IndexNum)
                         {
-                            otherIndex = ContactUnit[i].IndexNum;
+                            otherIndex = ContactUnits[i].IndexNum;
                             count = i;
                         }
                     }
-                    Vector3 pos = (ContactUnit[count].transform.position + transform.position) / 2;
+                    Vector3 pos = (ContactUnits[count].transform.position + transform.position) / 2;
                     On—ombine(pos, _pool.Tier + _tierIncreminator);
                     _pool.Release(this);
-                    _pool.Release(ContactUnit[count]);
+                    _pool.Release(ContactUnits[count]);
                 }
-                ContactUnit.Clear();
+                ContactUnits.Clear();
             }
         }
 

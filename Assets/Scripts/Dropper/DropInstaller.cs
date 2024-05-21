@@ -1,21 +1,16 @@
-using CrystalProject.Dropper;
-using CrystalProject.Score;
 using UnityEngine;
 using Zenject;
 
-namespace CrystalProject
+namespace CrystalProject.Dropper
 {
-    public class UnitInstaller : MonoInstaller
+    public class DropInstaller : MonoInstaller
     {
         [SerializeField] private DropModel _dropModel;
         [SerializeField] private DropAnimator _dropAnimator;
-        [SerializeField] private ScoreModel _scoreModel;
-
         public override void InstallBindings()
         {
             Container.Bind<DropModel>().FromInstance(_dropModel);
             Container.Bind<DropAnimator>().FromInstance(_dropAnimator);
-            Container.Bind<ScoreModel>().FromInstance(_scoreModel);
         }
     }
 }
