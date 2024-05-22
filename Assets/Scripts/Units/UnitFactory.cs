@@ -1,33 +1,34 @@
-using CrystalProject.Units;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitFactory
+namespace CrystalProject.Units.Create
 {
-    private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
-    private int _counter = 0;
-    public UnitFactory(UnitData[] unitDatas, Transform parentTransform)
+    public class UnitFactory
     {
-        int length = unitDatas.Length;
-        for (int i = 0; i < length; i++)
+        private Unit _unitPrefab;
+        private Transform _parentTransform;
+        private int _unitTier;
+        private bool _canBeCombined;
+        private CustomUnityPool _pool;
+        private int _counter = 0;
+
+        public UnitFactory(Unit unitPrefab, Transform parentTransform, int unitTier, bool canBeCombined, CustomUnityPool pool)
         {
-            bool isLastPool;
-            if (i < length - 1)
-                isLastPool = false;
-            else
-                isLastPool = true;
-            CustomUnityPool pool = new CustomUnityPool(unitDatas[i].Unit, parentTransform, i, isLastPool);
-            _pools.Add(pool);
+            _unitPrefab = unitPrefab;
+            _parentTransform = parentTransform;
+            _unitTier = unitTier;
+            _canBeCombined = canBeCombined;
+            _pool = pool;
+        }
+
+        public Unit CreateUnit()
+        {
+            var unit = Object.Instantiate(_unitPrefab, _parentTransform);
+            unit.UnitTier = _unitTier;
+            unit.Pool = _pool;
+            unit.CanBeCombined = _canBeCombined;
+            Debug.Log($"Unit {unit.name} ¹{_counter} created.");
+            _counter++;
+            return unit;
         }
     }
-
-    public Unit GetUnit(int tier)
-    {
-        Unit unit = _pools[tier].Get();
-        unit.SetIndexNum(_counter);
-        Debug.Log($"Unit ¹{_counter} spawned.");
-        _counter++;
-        return unit;
-    }
 }
-

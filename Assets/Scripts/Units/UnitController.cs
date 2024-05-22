@@ -1,19 +1,18 @@
 using CrystalProject.Dropper;
 using CrystalProject.Score;
-using CrystalProject.Units;
+using CrystalProject.Units.Create;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-namespace CrystalProject
+namespace CrystalProject.Units
 {
     public class UnitController : MonoBehaviour
     {
         [SerializeField] private UnitBundleData _unitBundleData;
-        private UnitFactory _unitFactory;
-
+        private List<CustomUnityPool> _pools = new List<CustomUnityPool>();
         private DropModel _dropModel;
         private DropAnimator _dropAnimator;
         private ScoreModel _scoreModel;
@@ -29,7 +28,12 @@ namespace CrystalProject
 
         private void Start()
         {
-            _unitFactory = new UnitFactory(_unitBundleData.UnitData, transform);
+            for (int i = 0; i < _unitBundleData.UnitData.Length; i++)
+            {
+                UnitData data = _unitBundleData.UnitData[i];
+                CustomUnityPool pool = new CustomUnityPool(data.Unit, transform, i, data.CanBeCombined);
+                _pools.Add(pool);
+            }
 
             Unit.OnÑombine += NextCombinedUnit;
             _dropAnimator.OnDropEnd += NextDroppedUnit;
@@ -46,13 +50,13 @@ namespace CrystalProject
         private void NextDroppedUnit()
         {
             int randomTier = GetUnitTier();
-            Unit unit = _unitFactory.GetUnit(randomTier);
+            Unit unit = _pools[randomTier].Get();
             _dropModel.GetUnit(unit.transform);
         }
 
         private void NextCombinedUnit(Vector3 pos, int tier)
         {
-            Unit unit = _unitFactory.GetUnit(tier);
+            Unit unit = _pools[tier].Get();
             unit.transform.position = pos;
             ScoreOnCombine(_unitBundleData.UnitData[tier].ScoreOnCombine);
         }

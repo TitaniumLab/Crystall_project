@@ -1,74 +1,39 @@
+using CrystalProject.Units.Create;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CrystalProject.Units
 {
+    /// <summary>
+    /// Main game unit (crystal)
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    public class Unit : MonoBehaviour
+    public class Unit : MonoBehaviour, ICombinable
     {
-        [field: SerializeField] public int IndexNum { get; private set; }
-        [SerializeField] private int _minUnitsToCombine = 1;
-        [SerializeField] private int _tierIncreminator = 1;
-        public List<Unit> ContactUnits { get; private set; } = new List<Unit>();
+        private int _unitTier;
+        public int UnitTier { set { _unitTier = value; } }
         private CustomUnityPool _pool;
+        public CustomUnityPool Pool { set { if (_pool is null) _pool = value; } }
+        private bool _canBeCombined;
+        public bool CanBeCombined { set { _canBeCombined = value; } }
         private Rigidbody _rb;
         private Quaternion _defaultRotation;
         public static event Action<Vector3, int> On—ombine;
 
-
         #region MonoBeh
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.collider.TryGetComponent(out Unit unit) && gameObject.activeSelf && unit._pool.Tier == _pool.Tier && !ContactUnits.Contains(unit) && !_pool.LastTier)
+            if (collision.collider.TryGetComponent(out ICombinable combinable) && _canBeCombined && gameObject.activeSelf)
             {
-                ContactUnits.Add(unit);
-                
-            }
-            Debug.LogWarning(collision.conta);
-        }
-
-        private void Update()
-        {
-            if (ContactUnits.Count >= _minUnitsToCombine)
-            {
-                if (ContactUnits.Count == _minUnitsToCombine && ContactUnits[0].ContactUnits.Count <= _minUnitsToCombine) //dont combine if contacted unit have more then _minUnitsToCombine cotacts
+                var otherUnitT = combinable.TryToCombine(_unitTier);
+                if (otherUnitT is not null)
                 {
-                    if (IndexNum > ContactUnits[0].IndexNum)
-                    {
-                        Vector3 pos = (ContactUnits[0].transform.position + transform.position) / 2;
-                        On—ombine(pos, _pool.Tier + _tierIncreminator);
-                    }
+                    var midPos = (otherUnitT.transform.position + transform.position) / 2;
+                    On—ombine(midPos, _unitTier + 1);
                     _pool.Release(this);
                 }
-                else if (ContactUnits.Count > _minUnitsToCombine)
-                {
-                    int otherIndex = ContactUnits[0].IndexNum;
-                    int count = 0;
-                    for (int i = 1; i < ContactUnits.Count; i++)
-                    {
-                        if (otherIndex > ContactUnits[i].IndexNum)
-                        {
-                            otherIndex = ContactUnits[i].IndexNum;
-                            count = i;
-                        }
-                    }
-                    Vector3 pos = (ContactUnits[count].transform.position + transform.position) / 2;
-                    On—ombine(pos, _pool.Tier + _tierIncreminator);
-                    _pool.Release(this);
-                    _pool.Release(ContactUnits[count]);
-                }
-                ContactUnits.Clear();
             }
-        }
-
-
-        private void OnEnable()
-        {
-            _rb.velocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
-            transform.rotation = _defaultRotation;
         }
 
         private void Awake()
@@ -76,14 +41,24 @@ namespace CrystalProject.Units
             _rb = GetComponent<Rigidbody>();
             _defaultRotation = transform.rotation;
         }
+        private void OnEnable()
+        {
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            transform.rotation = _defaultRotation;
+        }
         #endregion
 
         #region Methods
-        public void SetPool(CustomUnityPool pool) =>
-            _pool = pool;
-
-        public void SetIndexNum(int index) =>
-            IndexNum = index;
+        public Transform TryToCombine(int tier)
+        {
+            if (_unitTier == tier && gameObject.activeSelf)
+            {
+                _pool.Release(this);
+                return transform;
+            }
+            return null;
+        }
         #endregion
     }
 }
