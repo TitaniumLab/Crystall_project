@@ -7,7 +7,8 @@ namespace CrystalProject.Dropper
     public class DropModel : MonoBehaviour
     {
         private IPreview _currentUnitPreview;
-        [field: SerializeField] public Transform CurrentUnitTransform { get; private set; }
+        private Transform _ñurtUnitTransform;
+        public Transform CurrentUnitTransform { get => _ñurtUnitTransform; }
         [SerializeField] private Transform _appearPoint;
         [SerializeField] private float _zDropPos;
         [SerializeField] private float _dropHeight;
@@ -20,18 +21,18 @@ namespace CrystalProject.Dropper
         public void GetUnit(Transform unitTransform)
         {
             _currentUnitPreview?.DisablePreviewState();
-            CurrentUnitTransform = unitTransform;
-            if (CurrentUnitTransform.TryGetComponent(out IPreview preview)) _currentUnitPreview = preview;
+            _ñurtUnitTransform = unitTransform;
+            if (_ñurtUnitTransform.TryGetComponent(out IPreview preview)) _currentUnitPreview = preview;
             else throw new Exception($"Missing {typeof(IPreview).Name} component.");
             _currentUnitPreview.EnablePreviewState();
-            CurrentUnitTransform.position = _appearPoint.position;
-            OnUnitGet?.Invoke(CurrentUnitTransform);
+            _ñurtUnitTransform.position = _appearPoint.position;
+            OnUnitGet?.Invoke(_ñurtUnitTransform);
         }
 
         public Vector3 GetDropPosition()
         {
-            float leftBorder = _leftBorder.position.x + _leftBorder.lossyScale.x / 2 + CurrentUnitTransform.lossyScale.x + _leftBorderOffset;
-            float rightBorder = _rightBorder.position.x - _rightBorder.lossyScale.x / 2 - CurrentUnitTransform.lossyScale.x - _rightBorderOffset;
+            float leftBorder = _leftBorder.position.x + _leftBorder.lossyScale.x / 2 + _ñurtUnitTransform.lossyScale.x + _leftBorderOffset;
+            float rightBorder = _rightBorder.position.x - _rightBorder.lossyScale.x / 2 - _ñurtUnitTransform.lossyScale.x - _rightBorderOffset;
             float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
             if (xPos < leftBorder)
                 xPos = leftBorder;

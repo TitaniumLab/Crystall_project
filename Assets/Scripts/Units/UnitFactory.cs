@@ -23,9 +23,7 @@ namespace CrystalProject.Units.Create
         public Unit CreateUnit()
         {
             var unit = Object.Instantiate(_unitPrefab, _parentTransform);
-            unit.UnitTier = _unitTier;
-            unit.Pool = _pool;
-            unit.CanBeCombined = _canBeCombined;
+            unit.Init(_unitTier, _pool, _canBeCombined);
             Debug.Log($"Unit {unit.name} ¹{_counter} created.");
             _counter++;
             return unit;

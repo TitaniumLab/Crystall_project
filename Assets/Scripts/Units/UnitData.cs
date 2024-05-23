@@ -12,6 +12,8 @@ namespace CrystalProject.Units
         [SerializeField] private bool _canBeCombined = true;
         public bool CanBeCombined { get { return _canBeCombined; } }
         [field: SerializeField]
+        [field: ConditionalHide(nameof(_canBeCombined))] public int UnitTier { get; private set; }
+        [field: SerializeField]
         [field: ConditionalHide(nameof(_canBeCombined))] public int ScoreOnCombine { get; private set; }
 
         [SerializeField] private bool _canBeDropped;
