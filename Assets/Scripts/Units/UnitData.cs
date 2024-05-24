@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 using CrystalProject.Internal;
+using CrystalProject.Dropper;
 
 namespace CrystalProject.Units
 {
     [Serializable]
-    public class UnitData
+    public class UnitData: IDropData
     {
         [field: SerializeField] public Unit Unit { get; private set; }
 

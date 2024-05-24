@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CrystalProject.EventBus
 {
-    public class EventBus
+    public class CustomEventBus
     {
         private Dictionary<string, List<object>> _siganalCallbacks = new Dictionary<string, List<object>>();
 
