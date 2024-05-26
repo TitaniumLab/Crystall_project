@@ -1,96 +1,52 @@
-using CrystalProject.EventBus;
-using CrystalProject.EventBus.Signals;
 using CrystalProject.Units;
-using CrystalProject.Units.Create;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-using Random = UnityEngine.Random;
 
 namespace CrystalProject.Dropper
 {
+    /// <summary>
+    /// Contains all information for dropping a game unit
+    /// </summary>
     public class DropModel : MonoBehaviour
     {
-        [SerializeField] private Transform _appearPoint;
-        [SerializeField] private float _zDropPos;
-        [SerializeField] private float _dropHeight;
+        // Position data
+        [SerializeField] private float _dropHeight = 5.5f;
+        public float DropHeight { get { return _dropHeight; } }
         [SerializeField] private Transform _leftBorder;
         [SerializeField] private float _leftBorderOffset;
         [SerializeField] private Transform _rightBorder;
         [SerializeField] private float _rightBorderOffset;
-        private IPreview _currentUnitPreview;
-        private Transform _ñurtUnitTransform;
-        public Transform CurrentUnitTransform { get => _ñurtUnitTransform; }
-        private IUnitDispenser _unitDispenser;
-        private CustomEventBus _eventBus;
-        private IDropData[] _dropData;
+        [field: SerializeField] public Transform AppearPoint { get; private set; }
+        public float MinXValue { get; private set; } // Distance from left border
+        public float MaxXValue { get; private set; } // Distance from right border
 
-        public event Action<Transform> OnUnitGet;
+        // Current unit data
+        private IPreview _curUnitPreview;
+        public IPreview CurUnitPreview { get { return _curUnitPreview; } }
+        private Transform _curUnitTransform;
+        public Transform CurUnitTransform { get { return _curUnitTransform; } }
+        public IDropData[] DropData { get; private set; }
 
-        [Inject]
-        private void Construct(IUnitDispenser unitDispenser, CustomEventBus eventBus, IDropData[] dropData)
+
+        [Inject] // Dependency injection
+        private void Construct(IDropData[] dropData)
         {
-            _unitDispenser = unitDispenser;
-            _eventBus = eventBus;
-            _dropData = dropData;
+            DropData = dropData;
         }
 
-        private void Awake()
+        /// <summary>
+        /// Set new game unit for dropper.
+        /// </summary>
+        /// <param name="unitTransform">Transform of setted unit.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetNewUnit(Transform unitTransform)
         {
-            _eventBus.Subscribe<GameStartSignal>(OnGameStart);
-        }
-
-        private void OnGameStart(GameStartSignal signal)
-        {
-            _currentUnitPreview?.DisablePreviewState();
-            int tier = GetRandomUnitTier();
-            _ñurtUnitTransform = _unitDispenser.GetUnit(tier).transform;
-            if (_ñurtUnitTransform.TryGetComponent(out IPreview preview)) _currentUnitPreview = preview;
-            else throw new Exception($"Missing {typeof(IPreview).Name} component.");
-            _currentUnitPreview.EnablePreviewState();
-        }
-
-
-
-        private int GetRandomUnitTier()
-        {
-            List<int> dropUnitTiers = new List<int>();
-            for (int i = 0; i < _dropData.Length; i++)
-            {
-                if (_dropData[i].CanBeDropped)
-                    dropUnitTiers.Add(i);
-            }
-            int index;
-            if (dropUnitTiers.Count > 0)
-                index = Random.Range(0, dropUnitTiers.Count);
-            else
-                throw new Exception("Can't get game unit tier.");
-            return dropUnitTiers[index];
-        }
-
-        public void GetUnit(Transform unitTransform)
-        {
-            //_currentUnitPreview?.DisablePreviewState();
-            //_ñurtUnitTransform = unitTransform;
-            //if (_ñurtUnitTransform.TryGetComponent(out IPreview preview)) _currentUnitPreview = preview;
-            //else throw new Exception($"Missing {typeof(IPreview).Name} component.");
-            //_currentUnitPreview.EnablePreviewState();
-            //_ñurtUnitTransform.position = _appearPoint.position;
-            //OnUnitGet?.Invoke(_ñurtUnitTransform);
-        }
-
-        public Vector3 GetDropPosition()
-        {
-            //float leftBorder = _leftBorder.position.x + _leftBorder.lossyScale.x / 2 + _ñurtUnitTransform.lossyScale.x + _leftBorderOffset;
-            //float rightBorder = _rightBorder.position.x - _rightBorder.lossyScale.x / 2 - _ñurtUnitTransform.lossyScale.x - _rightBorderOffset;
-            //float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
-            //if (xPos < leftBorder)
-            //    xPos = leftBorder;
-            //else if (xPos > rightBorder)
-            //    xPos = rightBorder;
-            //Vector3 dropPoint = new Vector3(xPos, _dropHeight, _zDropPos);
-            //return dropPoint;
+            _curUnitTransform = unitTransform;
+            if (!_curUnitTransform.TryGetComponent(out _curUnitPreview))
+                throw new Exception($"Missing {typeof(IPreview).Name} component.");
+            MinXValue = _leftBorder.position.x + _leftBorder.lossyScale.x / 2 + _curUnitTransform.lossyScale.x + _leftBorderOffset;
+            MaxXValue = _rightBorder.position.x - _rightBorder.lossyScale.x / 2 - _curUnitTransform.lossyScale.x - _rightBorderOffset;
         }
     }
 }

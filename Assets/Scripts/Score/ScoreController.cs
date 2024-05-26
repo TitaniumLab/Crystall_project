@@ -1,33 +1,42 @@
 using TMPro;
 using UnityEngine;
-using System;
+using Zenject;
+using UnityEngine.UI;
+using CrystalProject.EventBus;
+using CrystalProject.EventBus.Signals;
 
 namespace CrystalProject.Score
 {
-    [RequireComponent(typeof(ScoreModel))]
     public class ScoreController : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
         [SerializeField] private string _scoreText = "Score: ";
+        [SerializeField] private Slider _scoreSlider;
+        private CustomEventBus _eventBus;
         private ScoreModel _scoreModel;
 
         private void Awake()
         {
-            if (TryGetComponent(out ScoreModel scoreModel)) _scoreModel = scoreModel;
-            else throw new Exception($"Missing {typeof(ScoreModel).Name} component.");
-
-            _scoreModel.OnScoreChange += ChangetScoreText;
-            _scoreTextMeshPro.text = _scoreText;
+            _scoreTextMeshPro.text = _scoreText + _scoreModel.Score;
+            _eventBus.Subscribe<CombineSignal>(ScoreOnCombine);
         }
 
         private void OnDestroy()
         {
-            _scoreModel.OnScoreChange -= ChangetScoreText;
+            _eventBus.Unsubscribe<CombineSignal>(ScoreOnCombine);
         }
 
-        private void ChangetScoreText(int score)
+        [Inject]
+        private void Construct(CustomEventBus customEventBus, ScoreModel scoreModel)
         {
-            _scoreTextMeshPro.text = _scoreText + score;
+            _eventBus = customEventBus;
+            _scoreModel = scoreModel;
+        }
+
+        private void ScoreOnCombine(CombineSignal signal)
+        {
+            _scoreModel.AddScoreOnCombine(signal.CombinedUnitTier);
+            _scoreTextMeshPro.text = _scoreText + _scoreModel.Score;
         }
     }
 }

@@ -5,46 +5,45 @@ using UnityEngine;
 
 namespace CrystalProject.Dropper
 {
-    [RequireComponent(typeof(IDropHandler))]
+    /// <summary>
+    /// Animate a given object
+    /// </summary>
     public class DropAnimator : MonoBehaviour
     {
-        private IDropHandler _dropHandler;
-        private Tween _tween;
-        private bool _canBeMoved;
         [SerializeField] private float _appearDuration = 0.5f;
         [SerializeField] private Vector3 _appearStartSize = Vector3.zero;
         [SerializeField] private float _moveDelay = 0.5f;
         [SerializeField] private float _dropDelay = 0.1f;
+        private Tween _tween;
+        private bool _canBeMoved;
         public event Action OnDropEnd;
-
-
-        private void Awake()
-        {
-            if (TryGetComponent(out IDropHandler dropHandler)) _dropHandler = dropHandler;
-            else throw new Exception($"Missing {typeof(IDropHandler).Name} component.");
-
-            _dropHandler.OnAppear += AppearAnimation;
-            _dropHandler.OnMove += MoveTo;
-            _dropHandler.OnDrop += Drop;
-        }
 
         private void OnDestroy()
         {
-            _dropHandler.OnAppear -= AppearAnimation;
-            _dropHandler.OnMove -= MoveTo;
-            _dropHandler.OnDrop -= Drop;
+            _tween.Kill();
         }
 
-        private async void AppearAnimation(Transform unitTransform)
+        /// <summary>
+        /// Play appear animation.
+        /// </summary>
+        /// <param name="unitTransform"></param>
+        /// <param name="appearPoint"></param>
+        public async void AppearAnimation(Transform unitTransform, Vector3 appearPoint)
         {
             _canBeMoved = false;
+            unitTransform.position = appearPoint;
             Vector3 defaultSize = unitTransform.localScale;
             unitTransform.localScale = _appearStartSize;
             await (_tween = unitTransform.DOScale(defaultSize, _appearDuration).SetEase(Ease.OutBounce)).AsyncWaitForCompletion();
             _canBeMoved = true;
         }
 
-        private void MoveTo(Transform unitTransform, Vector3 point)
+        /// <summary>
+        /// Move object to position.
+        /// </summary>
+        /// <param name="unitTransform"></param>
+        /// <param name="point"></param>
+        public void MoveTo(Transform unitTransform, Vector3 point)
         {
             if (_canBeMoved)
             {
@@ -53,7 +52,12 @@ namespace CrystalProject.Dropper
             }
         }
 
-        private async void Drop(Transform unitTransform, Vector3 point)
+        /// <summary>
+        /// Drop unit on position.
+        /// </summary>
+        /// <param name="unitTransform"></param>
+        /// <param name="point"></param>
+        public async void Drop(Transform unitTransform, Vector3 point)
         {
             if (_canBeMoved)
             {

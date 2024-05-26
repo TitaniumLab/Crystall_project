@@ -1,28 +1,23 @@
-using CrystalProject.Units;
 using System;
-using UnityEngine;
+using Zenject;
 
 namespace CrystalProject.Score
 {
-    public class ScoreModel : MonoBehaviour
+    public class ScoreModel : IScore
     {
-        [field: SerializeField] public int Score { get; private set; }
-        public event Action<int> OnScoreChange;
+        private int _score = 0;
+        public int Score { get { return _score; } }
+        private IScoreData[] _data;
 
-        private void Awake()
+        [Inject]
+        private void Contsruct(IScoreData[] data)
         {
-            UnitController.ScoreOnCombine += AddScore;
+            _data = data;
         }
 
-        private void OnDestroy()
+        public void AddScoreOnCombine(int tier)
         {
-            UnitController.ScoreOnCombine -= AddScore;
-        }
-
-        private void AddScore(int score)
-        {
-            Score += score;
-            OnScoreChange(Score);
+            _score += _data[tier].ScoreOnCombine;
         }
     }
 }

@@ -1,3 +1,4 @@
+using CrystalProject.EventBus;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -8,10 +9,10 @@ namespace CrystalProject.Units.Create
         private ObjectPool<Unit> _pool;
         private UnitFactory _factory;
 
-        public CustomUnityPool(Unit unitPrefab, Transform parentTransform, int unitTier, bool canBeCombined)
+        public CustomUnityPool(Unit unitPrefab, Transform parentTransform, int unitTier, bool canBeCombined,CustomEventBus customEventBus)
         {
             _pool = new ObjectPool<Unit>(CreateUnit, GetUnit, ReleaseUnit);
-            _factory = new UnitFactory(unitPrefab, parentTransform, unitTier, canBeCombined, this);
+            _factory = new UnitFactory(unitPrefab, parentTransform, unitTier, canBeCombined, this, customEventBus);
         }
 
         public Unit Get()

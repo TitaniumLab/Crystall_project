@@ -9,6 +9,6 @@ namespace CrystalProject.Units
         /// </summary>
         /// <param name="tier">Tier of game unit.</param>
         /// <returns>Transform of combinable object</returns>
-        public Transform TryToCombine(int tier);
+        public bool TryToCombine(int tier, Vector3 position);
     }
 }
