@@ -1,69 +1,66 @@
+using CrystalProject.EventBus;
+using CrystalProject.EventBus.Signals;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace CrystalProject.Loss
 {
     public class LossController : MonoBehaviour
     {
-        [field: SerializeField] public float LossDelayValue { get; private set; }
-        [field: SerializeField] public float CurrentValue { get; private set; }
-        [field: SerializeField] public float MinCurrentValue { get; private set; }
-        [field: SerializeField] public float IncrementerValue { get; private set; }
-        [field: SerializeField] public float MinIncrementerValue { get; private set; }
-        [field: SerializeField] public float DecreasingValue { get; private set; } = 1;
-        [field: SerializeField] public Slider Slider { get; private set; } //the slider will be replaced with a separate functionality-----------
+        [SerializeField] private float _lossDelayValue = 3;
+        [SerializeField] private float _currentValue;
+        [SerializeField] private float _minValue;
+        [SerializeField] private bool _isLossing = false;
+        [SerializeField] private float _minIncValue = 1;
+        [SerializeField] private float _decreasingValue = 1;
+        [SerializeField] private LossArea _lossArea;
+        private CustomEventBus _eventBus;
 
-        private LossStateMachine _stateMachine;
-        public WaitingState WaitingState { get; private set; }
-        public UnstableState UnstableState { get; private set; }
-        public LossState LossState { get; private set; }
+
 
         #region MonoBeh
         private void Awake()
         {
-            ILossSender.LossCountChanged += ChangeLossIncrementer;
-
-            _stateMachine = new LossStateMachine();
-            WaitingState = new WaitingState(this, _stateMachine);
-            UnstableState = new UnstableState(this, _stateMachine);
-            LossState = new LossState(this, _stateMachine);
-            _stateMachine.Initialize(WaitingState);
-
-            Slider.maxValue = LossDelayValue;
+            _lossArea.OnValueChanged += LossCount;
         }
 
         private void OnDestroy()
         {
-            ILossSender.LossCountChanged -= ChangeLossIncrementer;
+            _lossArea.OnValueChanged -= LossCount;
         }
 
         private void FixedUpdate()
         {
-            _stateMachine.CurrentState.LogicUpdate();
-            _stateMachine.CurrentState.BehaviorUpdate();
+            if (_isLossing)
+            {
+                _currentValue += Time.deltaTime * _lossArea.TotalLossInc;
+                if (_currentValue > _lossDelayValue)
+                    _eventBus.Invoke(new GameOverSignal());
+            }
+            else if (_currentValue > _minValue)
+            {
+                _currentValue -= Time.deltaTime * _decreasingValue;
+                if (_currentValue < _minValue)
+                    _currentValue = _minValue;
+            }
         }
         #endregion
 
         #region Methods
-        private void ChangeLossIncrementer(float value) =>
-            IncrementerValue += value;
-
-        public void ChangeValue()
+        [Inject]
+        private void Construct(CustomEventBus customEventBus)
         {
-            if (IncrementerValue > MinIncrementerValue)
-                CurrentValue += Time.fixedDeltaTime * IncrementerValue;
-            else
-            {
-                CurrentValue -= Time.fixedDeltaTime * DecreasingValue;
-                if (CurrentValue < MinCurrentValue)
-                    CurrentValue = MinCurrentValue;
-            }
-            Slider.value = CurrentValue;
+            _eventBus = customEventBus;
         }
 
-        public void TriggerLoss()
+        private void LossCount() // There was a state machine, but the loss controller got smaller
         {
-            Time.timeScale = 0;
+            if (_lossArea.TotalLossInc >= _minIncValue)
+                _isLossing = true;
+            else
+                _isLossing = false;
         }
         #endregion
     }

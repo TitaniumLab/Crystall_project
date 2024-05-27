@@ -2,28 +2,36 @@ using UnityEngine;
 
 namespace CrystalProject.Loss
 {
-    public class UnitLossArea : MonoBehaviour, ILossIncreaser, ILossSender
+    public class UnitLossArea : MonoBehaviour
     {
-        [SerializeField] private float _lossIncreseValue = 1;
-        [SerializeField] private bool _inLossZone = false;
+        [SerializeField] private float _lossIncValue = 1;
+        private ILossIncrementer _lossIncrementer;
+
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out _lossIncrementer))
+            {
+                _lossIncrementer.TotalLossInc += _lossIncValue;
+            }
+
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.TryGetComponent(out ILossIncrementer lossCount) && _lossIncrementer is not null)
+            {
+                _lossIncrementer.TotalLossInc -= _lossIncValue;
+                _lossIncrementer = null;
+            }
+        }
 
         private void OnDisable()
         {
-            if (_inLossZone)
-                StopIncreaser();
-        }
-
-        public void StartIncrease()
-        {
-            ILossSender.Invoke(_lossIncreseValue);
-            _inLossZone = true;
-        }
-
-        public void StopIncreaser()
-        {
-            ILossSender.Invoke(-_lossIncreseValue);
-            _inLossZone = false;
+            if (_lossIncrementer is not null)
+            {
+                _lossIncrementer.TotalLossInc -= _lossIncValue;
+                _lossIncrementer = null;
+            }
         }
     }
-
 }

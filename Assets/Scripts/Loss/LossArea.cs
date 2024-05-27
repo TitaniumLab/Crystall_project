@@ -1,18 +1,20 @@
+using System;
 using UnityEngine;
 
 namespace CrystalProject.Loss
 {
-    public class LossArea : MonoBehaviour
+    public class LossArea : MonoBehaviour, ILossIncrementer
     {
-        private void OnTriggerEnter(Collider other)
+        private float _totalIncrementer;
+        public float TotalLossInc
         {
-            if (other.TryGetComponent(out ILossIncreaser lossCount))
-                lossCount.StartIncrease();
+            get { return _totalIncrementer; }
+            set
+            {
+                _totalIncrementer = value;
+                OnValueChanged?.Invoke();
+            }
         }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.TryGetComponent(out ILossIncreaser lossCount))
-                lossCount.StopIncreaser();
-        }
+        public event Action OnValueChanged;
     }
 }
