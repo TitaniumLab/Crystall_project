@@ -1,22 +1,28 @@
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace CrystalProject.Loss
 {
+    /// <summary>
+    /// Counts down the time untill loss. 
+    /// To show count progress use LossView.
+    /// </summary>
     public class LossController : MonoBehaviour
     {
         [SerializeField] private float _lossDelayValue = 3;
-        [SerializeField] private float _currentValue;
+        public float LossDelayValue { get { return _lossDelayValue; } }
+        [SerializeField] private float _countValue;
+        public float CountValue { get { return _countValue; } }
         [SerializeField] private float _minValue;
         [SerializeField] private bool _isLossing = false;
         [SerializeField] private float _minIncValue = 1;
         [SerializeField] private float _decreasingValue = 1;
         [SerializeField] private LossArea _lossArea;
         private CustomEventBus _eventBus;
+        public event Action OnLossCounterChange;
 
 
 
@@ -33,17 +39,22 @@ namespace CrystalProject.Loss
 
         private void FixedUpdate()
         {
-            if (_isLossing)
+            if (_isLossing && _countValue < _lossDelayValue)
             {
-                _currentValue += Time.deltaTime * _lossArea.TotalLossInc;
-                if (_currentValue > _lossDelayValue)
+                _countValue += Time.deltaTime * _lossArea.TotalLossInc;
+                OnLossCounterChange();
+                if (_countValue >= _lossDelayValue)
+                {
                     _eventBus.Invoke(new GameOverSignal());
+                    Debug.LogWarning("You lose!");
+                }
             }
-            else if (_currentValue > _minValue)
+            else if (_countValue > _minValue && _countValue < _lossDelayValue)
             {
-                _currentValue -= Time.deltaTime * _decreasingValue;
-                if (_currentValue < _minValue)
-                    _currentValue = _minValue;
+                _countValue -= Time.deltaTime * _decreasingValue;
+                OnLossCounterChange();
+                if (_countValue < _minValue)
+                    _countValue = _minValue;
             }
         }
         #endregion
