@@ -76,8 +76,7 @@ namespace CrystalProject.Units
         {
             if (_unitTier == tier && gameObject.activeSelf)
             {
-                Vector3 midPos = (position + transform.position) / 2;
-                _eventBus.Invoke(new CombineSignal(_unitTier, midPos));
+                _eventBus.Invoke(new CombineSignal(_unitTier, transform.position, position));
                 _pool.Release(this);
                 return true;
             }

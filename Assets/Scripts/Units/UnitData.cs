@@ -19,6 +19,9 @@ namespace CrystalProject.Units
         // Combine data
         [field: SerializeField]
         [field: ConditionalHide(nameof(_canBeCombined))] public int TierIncriminator { get; private set; } = 1;
+        // Audio on combine
+        [field: SerializeField]
+        [field: ConditionalHide(nameof(_canBeCombined))] public AudioClip CombineSound { get; private set; }
         // Score data
         [field: SerializeField]
         [field: ConditionalHide(nameof(_canBeCombined))] public int ScoreOnCombine { get; private set; }

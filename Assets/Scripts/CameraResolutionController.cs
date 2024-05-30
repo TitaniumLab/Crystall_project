@@ -4,8 +4,8 @@ namespace CrystalProject
 {
     public class CameraResolutionController : MonoBehaviour
     {
-        [SerializeField] private Vector2 _minTargetAspectRatio;
-        [SerializeField] private Vector2 _maxTargetAspectRatio;
+        [SerializeField] private Vector2 _minTargetAspectRatio = new Vector2(3, 4);
+        [SerializeField] private Vector2 _maxTargetAspectRatio = new Vector2(9, 19.5f);
         [SerializeField] private Vector2 _defaultRectSize = new Vector2(1, 1);
         [SerializeField] private Vector2 _rectCenter = new Vector2(0.5f, 0.5f);
         [SerializeField] private float _targetHorizontalViewSize = 4f;

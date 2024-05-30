@@ -2,6 +2,8 @@ using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Units.Create;
 using System;
+using UnityEngine.UIElements;
+using UnityEngine;
 using Zenject;
 
 namespace CrystalProject.Combine
@@ -27,7 +29,8 @@ namespace CrystalProject.Combine
             int curTier = signal.CombinedUnitTier;
             int nextTier = curTier + _data[curTier].TierIncriminator;
             var unit = _dispenser.GetUnit(nextTier).transform;
-            unit.position = signal.Position;
+            Vector3 midPos = (signal.FirstPos + signal.SecondPos) / 2;
+            unit.position = midPos;
         }
 
         public void Dispose()
