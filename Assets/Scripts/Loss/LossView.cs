@@ -28,7 +28,6 @@ namespace CrystalProject.Loss
         private void TriggerLossIndicator()
         {
             int lossIndex = (int)(_controller.CountValue / _countPerIndicator);
-            Debug.Log(lossIndex);
             if (lossIndex < _lossIndicator.Length)
             {
                 float indicatorValue;

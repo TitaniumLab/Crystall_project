@@ -11,7 +11,6 @@ namespace CrystalProject.Score
     {
         [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
         [SerializeField] private string _scoreText = "Score: ";
-        [SerializeField] private Slider _scoreSlider;
         private CustomEventBus _eventBus;
         private ScoreModel _scoreModel;
 

@@ -36,7 +36,6 @@ namespace CrystalProject.Loss
         /// <param name="value">Value of gradient.</param>
         public void SetIndicatorValue(float value)
         {
-            Debug.Log(value);
             _meshRend.material.color = _colorGradient.Evaluate(value);
             _meshRend.material.SetColor(_emissionPropertyName, _emissionGradient.Evaluate(value));
             if (value > _pSActiveValue && !_particleSystem.isPlaying)
