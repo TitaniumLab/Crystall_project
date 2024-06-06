@@ -5,6 +5,8 @@ using CrystalProject.Units.Create;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -18,6 +20,8 @@ namespace CrystalProject.Dropper
     public class DropController : MonoBehaviour
     {
         [SerializeField] private int _mouseButtonIndex; // Input mouse button index
+        [SerializeField] private int _uILayerIndex = 5;
+        [SerializeField] private float _checkDis = 100;
         private DropModel _dropModel;
         private DropAnimator _dropAnimator;
         private CustomEventBus _eventBus;
@@ -40,8 +44,12 @@ namespace CrystalProject.Dropper
         // Drop on button up
         private void Update()
         {
+            //if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, _checkDis, 1 << _uILayerIndex))
+            //    Debug.Log("rqewr" + (_uILayerIndex));
+            if (EventSystem.current.RaycastAll()
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
             {
+                Debug.Log(Input.mousePosition);
                 var dropPos = GetDropPosition();
                 _dropAnimator.Drop(_dropModel.CurUnitTransform, dropPos);
 

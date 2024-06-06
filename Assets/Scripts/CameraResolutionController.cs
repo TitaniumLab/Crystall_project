@@ -30,17 +30,8 @@ namespace CrystalProject
             _previousRatio = (float)Screen.width / (float)Screen.height;
             Debug.Log($"Current screen ratio: {_previousRatio}.");
 
-            if (_previousRatio > _minTargetAspectRatio.x / _minTargetAspectRatio.y)
-            {
-                SetRelariveCameraViewSize(_minTargetAspectRatio);
-                float pixelScale = Screen.height / _minTargetAspectRatio.y;
-                float targetWidth = pixelScale * _minTargetAspectRatio.x;
-                float relativeWidth = targetWidth / Screen.width;
-                Vector2 rectSize = new Vector2(relativeWidth, _defaultRectSize.y);
-                Camera.main.rect = new Rect(default, rectSize) { center = _rectCenter };
-                Debug.Log($"New camera rect: {rectSize}.");
-            }
-            else if (_previousRatio < _maxTargetAspectRatio.x / _maxTargetAspectRatio.y)
+            // If screen higher then target camera view
+            if (_previousRatio < _maxTargetAspectRatio.x / _maxTargetAspectRatio.y)
             {
                 SetRelariveCameraViewSize(_maxTargetAspectRatio);
                 float pixelScale = Screen.width / _maxTargetAspectRatio.x;
@@ -48,7 +39,18 @@ namespace CrystalProject
                 float relativeHeight = targetHeight / Screen.height;
                 Vector2 rectSize = new Vector2(_defaultRectSize.x, relativeHeight);
                 Camera.main.rect = new Rect(default, rectSize) { center = _rectCenter };
-                Debug.Log($"New camera rect: {rectSize}.");
+                Debug.Log($"New camera rect: {rectSize}.1");
+            }
+            // If screen wider then target camera view
+            else if (_previousRatio > _minTargetAspectRatio.x / _minTargetAspectRatio.y)
+            {
+                SetRelariveCameraViewSize(_minTargetAspectRatio);
+                float pixelScale = Screen.height / _minTargetAspectRatio.y;
+                float targetWidth = pixelScale * _minTargetAspectRatio.x;
+                float relativeWidth = targetWidth / Screen.width;
+                Vector2 rectSize = new Vector2(relativeWidth, _defaultRectSize.y);
+                Camera.main.rect = new Rect(default, rectSize) { center = _rectCenter };
+                Debug.Log($"New camera rect: {rectSize}.2");
             }
             else
             {
@@ -58,11 +60,11 @@ namespace CrystalProject
 
         private void SetRelariveCameraViewSize(Vector2 targetRatio)
         {
-
+            Camera.main.rect = new Rect(default, _defaultRectSize) { center = _rectCenter };
             float relativeViewSize = targetRatio.y / (targetRatio.x / _targetHorizontalViewSize);
             Camera.main.orthographicSize = relativeViewSize;
             Debug.Log($"New view size: {relativeViewSize}.");
-            Camera.main.rect = new Rect(default, _defaultRectSize) { center = _rectCenter };
+
         }
     }
 }
