@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -20,15 +19,13 @@ namespace CrystalProject.Dropper
     public class DropController : MonoBehaviour
     {
         [SerializeField] private int _mouseButtonIndex; // Input mouse button index
-        [SerializeField] private int _uILayerIndex = 5;
-        [SerializeField] private float _checkDis = 100;
         private DropModel _dropModel;
         private DropAnimator _dropAnimator;
         private CustomEventBus _eventBus;
         private IUnitDispenser _unitDispenser;
         private IScore _score;
 
-        #region MonoBeh
+        #region MONOBEH ////////////////////////////////////////////////
         // Getting instances of classes and subscriptions
         private void Awake()
         {
@@ -44,22 +41,28 @@ namespace CrystalProject.Dropper
         // Drop on button up
         private void Update()
         {
-            //if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, _checkDis, 1 << _uILayerIndex))
-            //    Debug.Log("rqewr" + (_uILayerIndex));
-            if (EventSystem.current.RaycastAll()
+
+
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
             {
-                Debug.Log(Input.mousePosition);
-                var dropPos = GetDropPosition();
-                _dropAnimator.Drop(_dropModel.CurUnitTransform, dropPos);
-
+                // If not on UI -> Drop game unit
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    var dropPos = GetDropPosition();
+                    _dropAnimator.Drop(_dropModel.CurUnitTransform, dropPos);
+                }
+                else // Return to drop pos
+                {
+                    _dropAnimator.MoveTo(_dropModel.CurUnitTransform, _dropModel.AppearPoint.position);
+                }
             }
         }
 
         // Move to point while holding button
         private void FixedUpdate()
         {
-            if (Input.GetMouseButton(_mouseButtonIndex))
+            // If button pressed and not on UI
+            if (Input.GetMouseButton(_mouseButtonIndex) && !EventSystem.current.IsPointerOverGameObject())
             {
                 var dropPos = GetDropPosition();
                 _dropAnimator.MoveTo(_dropModel.CurUnitTransform, dropPos);
@@ -74,7 +77,7 @@ namespace CrystalProject.Dropper
         }
         #endregion
 
-        #region Methods
+        #region METHODS ////////////////////////////////////////////////
         [Inject] // Dependency injection
         private void Construct(CustomEventBus eventBus, IUnitDispenser unitDispenser, IScore score)
         {
@@ -140,6 +143,18 @@ namespace CrystalProject.Dropper
                 throw new Exception("Can't get game unit tier.");
             return dropUnitTiers[index];
         }
+
+        //private bool CheckOnUI()
+        //{
+        //    List<RaycastResult> results = new List<RaycastResult>();
+        //    EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current), results);
+        //    foreach (var item in results)
+        //    {
+        //        if (item. == _uILayerIndex)
+        //            return true;
+        //    }
+        //    return false;
+        //}
         #endregion
     }
 }

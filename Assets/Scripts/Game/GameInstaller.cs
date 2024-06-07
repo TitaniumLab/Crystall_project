@@ -15,6 +15,7 @@ namespace CrystalProject.Game
         private CombineController _combineController;
         [SerializeField] private Transform _parentOfGameUnits;
         private UnitController _unitController;
+        [SerializeField] private GameController _gameController;
 
         public override void InstallBindings()
         {
@@ -36,6 +37,9 @@ namespace CrystalProject.Game
             _unitController = new UnitController(_parentOfGameUnits);
             Container.QueueForInject(_unitController);
             Container.Bind<IUnitDispenser>().FromInstance(_unitController);
+
+            // Bind GameController
+            Container.Bind<GameController>().FromInstance(_gameController);
         }
 
 

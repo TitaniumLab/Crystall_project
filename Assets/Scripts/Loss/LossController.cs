@@ -13,35 +13,36 @@ namespace CrystalProject.Loss
     public class LossController : MonoBehaviour
     {
         [SerializeField] private float _lossDelayValue = 3;
-        public float LossDelayValue { get { return _lossDelayValue; } }
         [SerializeField] private float _countValue;
-        public float CountValue { get { return _countValue; } }
         [SerializeField] private float _minValue;
-        [SerializeField] private bool _isLossing = false;
+        [SerializeField] private float _incValue;
         [SerializeField] private float _minIncValue = 1;
-        [SerializeField] private float _decreasingValue = 1;
+        [SerializeField] private float _decValue = 1;
         [SerializeField] private LossArea _lossArea;
+
+        public float LossDelayValue { get { return _lossDelayValue; } }
+        public float CountValue { get { return _countValue; } }
+
         private CustomEventBus _eventBus;
         public event Action OnLossCounterChange;
-
-
 
         #region MonoBeh
         private void Awake()
         {
-            _lossArea.OnValueChanged += LossCount;
+            _lossArea.OnValueChanged += ChangeIncreminatorCount;
         }
+
 
         private void OnDestroy()
         {
-            _lossArea.OnValueChanged -= LossCount;
+            _lossArea.OnValueChanged -= ChangeIncreminatorCount;
         }
 
         private void FixedUpdate()
         {
-            if (_isLossing && _countValue < _lossDelayValue)
+            if (_incValue >= _minIncValue && _countValue < _lossDelayValue)
             {
-                _countValue += Time.deltaTime * _lossArea.TotalLossInc;
+                _countValue += Time.deltaTime * _incValue;
                 OnLossCounterChange();
                 if (_countValue >= _lossDelayValue)
                 {
@@ -51,7 +52,7 @@ namespace CrystalProject.Loss
             }
             else if (_countValue > _minValue && _countValue < _lossDelayValue)
             {
-                _countValue -= Time.deltaTime * _decreasingValue;
+                _countValue -= Time.deltaTime * _decValue;
                 OnLossCounterChange();
                 if (_countValue < _minValue)
                     _countValue = _minValue;
@@ -66,12 +67,9 @@ namespace CrystalProject.Loss
             _eventBus = customEventBus;
         }
 
-        private void LossCount() // There was a state machine, but the loss controller got smaller
+        private void ChangeIncreminatorCount() // There was a state machine, but the loss controller got smaller
         {
-            if (_lossArea.TotalLossInc >= _minIncValue)
-                _isLossing = true;
-            else
-                _isLossing = false;
+            _incValue = _lossArea.TotalLossInc;
         }
         #endregion
     }
