@@ -36,13 +36,13 @@ namespace CrystalProject.Score
 
         private void OnGameStart(GameStartSignal gameStartSignal)
         {
-            _scoreView.SetScoreText(_scoreModel.Score);
+            _scoreView.ShowScore(_scoreModel.Score);
         }
 
         private void ScoreOnCombine(CombineSignal signal)
         {
             _scoreModel.AddScoreOnCombine(signal.CombinedUnitTier);
-            _scoreView.SetScoreText(_scoreModel.Score);
+            _scoreView.ShowScore(_scoreModel.Score);
         }
     }
 }

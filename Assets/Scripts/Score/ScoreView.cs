@@ -8,11 +8,12 @@ namespace CrystalProject.Score
     {
         [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
         [SerializeField] private string _scoreText = "Score: ";
-        [SerializeField] private Slider _scoreIndicator;
+        [SerializeField] private ScoreThreshold _scoreThreshold;
 
-        public void SetScoreText(int score)
+        public void ShowScore(int score)
         {
             _scoreTextMeshPro.text = _scoreText + score;
+            _scoreThreshold.SetSliderValue(score);
         }
 
 

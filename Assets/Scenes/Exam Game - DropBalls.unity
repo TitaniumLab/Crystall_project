@@ -232,9 +232,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thresholdImg: {fileID: 3859125800989821433, guid: bdf1120757486ec4f983999d64a03c62, type: 3}
-  _imgMinAnchor: {x: 0, y: 0.5}
-  _imgMaxAnchor: {x: 0, y: 0.5}
-  _imgYOffset: 0
+  _threMinAnchor: {x: 0, y: 0.5}
+  _threMaxAnchor: {x: 0, y: 0.5}
+  _threImgYOffset: 0
+  _gameUnitSize: 0.5
+  _imgMinAnchor: {x: 0.5, y: 0}
+  _imgMaxAnchor: {x: 0.5, y: 0}
+  _animDur: 1
 --- !u!114 &66482477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1459,7 +1463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scoreTextMeshPro: {fileID: 1274321079}
   _scoreText: 'Score: '
-  _scoreIndicator: {fileID: 0}
+  _scoreThreshold: {fileID: 66482476}
 --- !u!1 &524798021
 GameObject:
   m_ObjectHideFlags: 0

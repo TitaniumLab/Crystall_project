@@ -5,11 +5,12 @@ using CrystalProject.Dropper;
 using CrystalProject.Combine;
 using CrystalProject.Units.Data;
 using CrystalProject.Score;
+using UnityEngine.UI;
 
 namespace CrystalProject.Units
 {
     [Serializable]
-    public class UnitData : IDropData, ICombineData, IUnitData, IScoreData
+    public class UnitData : IDropData, ICombineData, IUnitData, IScoreData, IScoreThresholdImages
     {
         // Data for unit creation
         [field: SerializeField] public Unit Unit { get; private set; }
@@ -30,7 +31,8 @@ namespace CrystalProject.Units
         public bool CanBeDropped { get { return _canBeDropped; } }
         [field: SerializeField]
         [field: ConditionalHide(nameof(_canBeDropped))] public int ScoreToDrop { get; private set; }
-
+        [field: SerializeField]
+        [field: ConditionalHide(nameof(_canBeDropped))] public Image ThresholdUnitImg { get; private set; }
 
     }
 }
