@@ -1,29 +1,17 @@
-using TMPro;
+using System;
 using UnityEngine;
 using Zenject;
-using UnityEngine.UI;
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 
 namespace CrystalProject.Score
 {
+    [RequireComponent(typeof(ScoreView))]
     public class ScoreController : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _scoreTextMeshPro;
-        [SerializeField] private string _scoreText = "Score: ";
+        private ScoreView _scoreView;
         private CustomEventBus _eventBus;
         private ScoreModel _scoreModel;
-
-        private void Awake()
-        {
-            _scoreTextMeshPro.text = _scoreText + _scoreModel.Score;
-            _eventBus.Subscribe<CombineSignal>(ScoreOnCombine);
-        }
-
-        private void OnDestroy()
-        {
-            _eventBus.Unsubscribe<CombineSignal>(ScoreOnCombine);
-        }
 
         [Inject]
         private void Construct(CustomEventBus customEventBus, ScoreModel scoreModel)
@@ -32,10 +20,29 @@ namespace CrystalProject.Score
             _scoreModel = scoreModel;
         }
 
+        private void Awake()
+        {
+            if (!TryGetComponent(out _scoreView))
+                throw new Exception($"Missing {typeof(ScoreView)} component.");
+            _eventBus.Subscribe<CombineSignal>(ScoreOnCombine);
+            _eventBus.Subscribe<GameStartSignal>(OnGameStart);
+        }
+
+        private void OnDestroy()
+        {
+            _eventBus.Unsubscribe<CombineSignal>(ScoreOnCombine);
+            _eventBus.Unsubscribe<GameStartSignal>(OnGameStart);
+        }
+
+        private void OnGameStart(GameStartSignal gameStartSignal)
+        {
+            _scoreView.SetScoreText(_scoreModel.Score);
+        }
+
         private void ScoreOnCombine(CombineSignal signal)
         {
             _scoreModel.AddScoreOnCombine(signal.CombinedUnitTier);
-            _scoreTextMeshPro.text = _scoreText + _scoreModel.Score;
+            _scoreView.SetScoreText(_scoreModel.Score);
         }
     }
 }
