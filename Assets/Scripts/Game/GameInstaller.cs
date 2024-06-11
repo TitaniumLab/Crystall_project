@@ -42,7 +42,6 @@ namespace CrystalProject.Game
             Container.Bind<GameController>().FromInstance(_gameController);
         }
 
-
         private void OnDestroy()
         {
             _combineController.Dispose();
