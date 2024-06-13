@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -41,12 +42,14 @@ namespace CrystalProject.Dropper
         // Drop on button up
         private void Update()
         {
-
-
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
             {
-                // If not on UI -> Drop game unit
-                if (!EventSystem.current.IsPointerOverGameObject())
+                PointerEventData data = new(EventSystem.current) { position = Input.mousePosition };
+                List<RaycastResult> results = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(data, results);
+
+                //  If not on UI -> Drop game unit
+                if (results.Count == 0)
                 {
                     var dropPos = GetDropPosition();
                     _dropAnimator.Drop(_dropModel.CurUnitTransform, dropPos);
@@ -62,10 +65,18 @@ namespace CrystalProject.Dropper
         private void FixedUpdate()
         {
             // If button pressed and not on UI
-            if (Input.GetMouseButton(_mouseButtonIndex) && !EventSystem.current.IsPointerOverGameObject())
+            if (Input.GetMouseButton(_mouseButtonIndex))
             {
-                var dropPos = GetDropPosition();
-                _dropAnimator.MoveTo(_dropModel.CurUnitTransform, dropPos);
+                PointerEventData data = new(EventSystem.current) { position = Input.mousePosition };
+                List<RaycastResult> results = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(data, results);
+
+                //  If not on UI
+                if (results.Count == 0)
+                {
+                    var dropPos = GetDropPosition();
+                    _dropAnimator.MoveTo(_dropModel.CurUnitTransform, dropPos);
+                }
             }
         }
 
@@ -143,18 +154,6 @@ namespace CrystalProject.Dropper
                 throw new Exception("Can't get game unit tier.");
             return dropUnitTiers[index];
         }
-
-        //private bool CheckOnUI()
-        //{
-        //    List<RaycastResult> results = new List<RaycastResult>();
-        //    EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current), results);
-        //    foreach (var item in results)
-        //    {
-        //        if (item. == _uILayerIndex)
-        //            return true;
-        //    }
-        //    return false;
-        //}
         #endregion
     }
 }

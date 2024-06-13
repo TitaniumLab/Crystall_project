@@ -8,7 +8,9 @@ namespace CrystalProject
         [SerializeField] private Vector2 _maxTargetAspectRatio = new Vector2(9, 19.5f);
         [SerializeField] private Vector2 _defaultRectSize = new Vector2(1, 1);
         [SerializeField] private Vector2 _rectCenter = new Vector2(0.5f, 0.5f);
-        [SerializeField] private float _targetHorizontalViewSize = 4f;
+        [SerializeField] private float _minHViewSize = 4f;
+        [SerializeField] private float _minViewSize = 6.5f;
+
         private float _previousRatio;
 
         private void Start()
@@ -61,9 +63,10 @@ namespace CrystalProject
         private void SetRelariveCameraViewSize(Vector2 targetRatio)
         {
             Camera.main.rect = new Rect(default, _defaultRectSize) { center = _rectCenter };
-            float relativeViewSize = targetRatio.y / (targetRatio.x / _targetHorizontalViewSize);
-            Camera.main.orthographicSize = relativeViewSize;
-            Debug.Log($"New view size: {relativeViewSize}.");
+            float relativeHViewSize = targetRatio.y / (targetRatio.x / _minHViewSize);
+            float viewSize = (relativeHViewSize < _minViewSize) ? _minViewSize : relativeHViewSize;
+            Camera.main.orthographicSize = viewSize;
+            Debug.Log($"New view size: {viewSize}.");
 
         }
     }

@@ -85,7 +85,7 @@ namespace CrystalProject.Score
                 // Create and set threshold image
                 var threshold = Instantiate(_thresholdImg, _slider.transform);
                 float relativeTresSize = _rectTransform.sizeDelta.y / threshold.rectTransform.sizeDelta.y;
-                float position = _rectTransform.sizeDelta.x * ((float)scores[i] / (float)_maxScore);
+                float position = _rectTransform.rect.width * ((float)scores[i] / (float)_maxScore);
                 threshold.rectTransform.localScale = new Vector3(relativeTresSize, relativeTresSize, relativeTresSize);
                 threshold.rectTransform.anchorMin = _threMinAnchor;
                 threshold.rectTransform.anchorMax = _threMaxAnchor;

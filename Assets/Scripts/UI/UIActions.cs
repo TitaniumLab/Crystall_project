@@ -2,6 +2,7 @@ using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Game;
 using CrystalProject.Score;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -69,8 +70,15 @@ namespace CrystalProject.UI
             _gameOverTransform.gameObject.SetActive(true);
         }
 
+
         private void OnMenuOpenClose()
         {
+            StartCoroutine(IEnumOnMenuOpenClose());
+        }
+
+        private IEnumerator IEnumOnMenuOpenClose()
+        {
+
             if (!_menuTransform.gameObject.activeInHierarchy)
             {
                 Time.timeScale = _timeScaleInMenu;
@@ -78,6 +86,7 @@ namespace CrystalProject.UI
             }
             else
             {
+                yield return new WaitForEndOfFrame(); // Prevents actions when exiting the menu
                 Time.timeScale = _defalultTimeScale;
                 _menuTransform.gameObject.SetActive(false);
             }
