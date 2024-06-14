@@ -75,8 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e557362aad8af8046bca767586cfd766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lossIncreseValue: 1
-  _inLossZone: 0
+  _lossIncValue: 1
 --- !u!1 &6897910910622620373
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb3e42bd61006d49a8586c124756f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IndexNum>k__BackingField: 0
 --- !u!114 &-6955244144139476110
 MonoBehaviour:
   m_ObjectHideFlags: 0

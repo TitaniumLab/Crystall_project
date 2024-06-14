@@ -12,8 +12,7 @@ namespace CrystalProject.Score
     {
         [Header("Threshold options")]
         [SerializeField] private Image _thresholdImg;
-        [SerializeField] private Vector2 _threMinAnchor, _threMaxAnchor;
-        [SerializeField] private float _threImgYOffset;
+        [SerializeField] private float _threMinYAnchor, _threMaxYAnchor;
         [Header("GameUnit options")]
         [SerializeField] private float _gameUnitSize;
         [SerializeField] private Vector2 _imgMinAnchor, _imgMaxAnchor;
@@ -85,11 +84,10 @@ namespace CrystalProject.Score
                 // Create and set threshold image
                 var threshold = Instantiate(_thresholdImg, _slider.transform);
                 float relativeTresSize = _rectTransform.sizeDelta.y / threshold.rectTransform.sizeDelta.y;
-                float position = _rectTransform.rect.width * ((float)scores[i] / (float)_maxScore);
+                float xAnchorPos = (float)scores[i] / (float)_maxScore;
                 threshold.rectTransform.localScale = new Vector3(relativeTresSize, relativeTresSize, relativeTresSize);
-                threshold.rectTransform.anchorMin = _threMinAnchor;
-                threshold.rectTransform.anchorMax = _threMaxAnchor;
-                threshold.rectTransform.anchoredPosition = new Vector2(position, _threImgYOffset);
+                threshold.rectTransform.anchorMin = new Vector2(xAnchorPos, _threMinYAnchor);
+                threshold.rectTransform.anchorMax = new Vector2(xAnchorPos, _threMaxYAnchor);
 
                 // Create and set Game Unit image
                 var gameUnit = Instantiate(imgs[i], threshold.transform);
