@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e45b3f53fd6fc78408bde4ae30a44685, type: 3}
-  m_Name: CrystalsBundleData
+  m_Name: CrystalsBundleData Test
   m_EditorClassIdentifier: 
   <UnitData>k__BackingField:
   - <Unit>k__BackingField: {fileID: 5663212163000446350, guid: c5789570afec7d14db91213a25a004e1, type: 3}
@@ -27,7 +27,7 @@ MonoBehaviour:
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 2
     _canBeDropped: 1
-    <ScoreToDrop>k__BackingField: 100
+    <ScoreToDrop>k__BackingField: 10
     <ThresholdUnitImg>k__BackingField: {fileID: 4263049144482503142, guid: 54d7d1fcd533ddb49ba8775bebb1f613, type: 3}
   - <Unit>k__BackingField: {fileID: -3280630519862757541, guid: 7052fc0bcfbe02149862924fd08fa8ab, type: 3}
     _canBeCombined: 1
@@ -35,7 +35,7 @@ MonoBehaviour:
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 4
     _canBeDropped: 1
-    <ScoreToDrop>k__BackingField: 400
+    <ScoreToDrop>k__BackingField: 20
     <ThresholdUnitImg>k__BackingField: {fileID: 4263049144482503142, guid: 54d7d1fcd533ddb49ba8775bebb1f613, type: 3}
   - <Unit>k__BackingField: {fileID: 7360468067039774118, guid: b962dd74c40318d4685d4c2ebec098a5, type: 3}
     _canBeCombined: 1

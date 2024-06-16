@@ -1,4 +1,3 @@
-using CrystalProject.Combine;
 using CrystalProject.EventBus;
 using CrystalProject.Score;
 using CrystalProject.Units;
@@ -12,7 +11,6 @@ namespace CrystalProject.Game
     {
         private CustomEventBus _customEventBus;
         private ScoreModel _scoreModel;
-        private CombineController _combineController;
         [SerializeField] private Transform _parentOfGameUnits;
         private UnitController _unitController;
         [SerializeField] private GameController _gameController;
@@ -29,10 +27,6 @@ namespace CrystalProject.Game
             Container.Bind<ScoreModel>().FromInstance(_scoreModel).AsSingle();
             Container.Bind<IScore>().FromInstance(_scoreModel).AsSingle();
 
-            // Create and inject CombineController
-            _combineController = new CombineController();
-            Container.QueueForInject(_combineController);
-
             // Create and bind Unit Creator
             _unitController = new UnitController(_parentOfGameUnits);
             Container.QueueForInject(_unitController);
@@ -40,11 +34,6 @@ namespace CrystalProject.Game
 
             // Bind GameController
             Container.Bind<GameController>().FromInstance(_gameController);
-        }
-
-        private void OnDestroy()
-        {
-            _combineController.Dispose();
         }
     }
 }
