@@ -3,18 +3,37 @@ using UnityEngine;
 
 namespace CrystalProject.Loss
 {
-    public class LossArea : MonoBehaviour, ILossIncrementer
+    public class LossArea : MonoBehaviour
     {
-        [SerializeField] private float _totalIncrementer;
-        public float TotalLossInc
+        private bool _isTriggered = false;
+
+        public event Action IsTriggered;
+        public event Action IsNotTriggered;
+
+        // OnTriggerEnter/Exit works incorrect (Coz of pool system)
+        // Order of execution: OnTriggerStay => Update
+        // If get GameUnit in LossArea call IsTriggered event and prevent other GameUnit to trigger it
+        // if the GameUnit is not detected call IsNotTriggered event
+        private void OnTriggerStay(Collider other)
         {
-            get { return _totalIncrementer; }
-            set
+            if (other.TryGetComponent(out UnitLossArea component) && !_isTriggered)
             {
-                _totalIncrementer = value;
-                OnValueChanged?.Invoke();
+                IsTriggered?.Invoke();
+                _isTriggered = true;
             }
         }
-        public event Action OnValueChanged;
+
+        private void FixedUpdate()
+        {
+            if (_isTriggered)
+            {
+                _isTriggered = false;
+            }
+            else
+            {
+                IsNotTriggered?.Invoke();
+            }
+
+        }
     }
 }

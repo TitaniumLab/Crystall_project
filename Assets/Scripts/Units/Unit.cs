@@ -1,8 +1,8 @@
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Units.Create;
+using System;
 using UnityEngine;
-using Zenject;
 
 namespace CrystalProject.Units
 {
@@ -19,6 +19,7 @@ namespace CrystalProject.Units
         private CustomEventBus _eventBus;
         private Rigidbody _rb;
         private Quaternion _defaultRotation; // For setting rotation after pooling
+
 
         #region MonoBeh
         private void Awake()
@@ -49,13 +50,6 @@ namespace CrystalProject.Units
         #endregion
 
         #region Methods
-        //[Inject]
-        //private void Construct(CustomEventBus customEventBus)
-        //{
-        //    _eventBus = customEventBus;
-
-        //}
-
         /// <summary>
         /// Set object fields
         /// </summary>
@@ -70,7 +64,6 @@ namespace CrystalProject.Units
 
             _eventBus = customEventBus;
         }
-
 
         public bool TryToCombine(int tier, Vector3 position)
         {

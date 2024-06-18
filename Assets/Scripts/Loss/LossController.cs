@@ -15,9 +15,9 @@ namespace CrystalProject.Loss
         [SerializeField] private float _lossDelayValue = 3;
         [SerializeField] private float _countValue;
         [SerializeField] private float _minValue;
-        [SerializeField] private float _incValue;
-        [SerializeField] private float _minIncValue = 1;
+        [SerializeField] private float _incValue = 1;
         [SerializeField] private float _decValue = 1;
+        [SerializeField] private bool _losingDebug = false;
         [SerializeField] private LossArea _lossArea;
 
         public float LossDelayValue { get { return _lossDelayValue; } }
@@ -29,34 +29,21 @@ namespace CrystalProject.Loss
         #region MonoBeh
         private void Awake()
         {
-            _lossArea.OnValueChanged += ChangeIncreminatorCount;
+            _lossArea.IsTriggered += IncLossCountValue;
+            _lossArea.IsNotTriggered += DecLossCountValue;
         }
 
 
         private void OnDestroy()
         {
-            _lossArea.OnValueChanged -= ChangeIncreminatorCount;
+            _lossArea.IsTriggered -= IncLossCountValue;
+            _lossArea.IsNotTriggered -= DecLossCountValue;
         }
 
         private void FixedUpdate()
         {
-            if (_incValue >= _minIncValue && _countValue < _lossDelayValue)
-            {
-                _countValue += Time.deltaTime * _incValue;
-                OnLossCounterChange();
-                if (_countValue >= _lossDelayValue)
-                {
-                    _eventBus.Invoke(new GameOverSignal());
-                    Debug.LogWarning("You lose!");
-                }
-            }
-            else if (_countValue > _minValue && _countValue < _lossDelayValue)
-            {
-                _countValue -= Time.deltaTime * _decValue;
-                OnLossCounterChange();
-                if (_countValue < _minValue)
-                    _countValue = _minValue;
-            }
+            if (_losingDebug)
+                IncLossCountValue();
         }
         #endregion
 
@@ -67,9 +54,29 @@ namespace CrystalProject.Loss
             _eventBus = customEventBus;
         }
 
-        private void ChangeIncreminatorCount() // There was a state machine, but the loss controller got smaller
+        private void IncLossCountValue()
         {
-            _incValue = _lossArea.TotalLossInc;
+            if (_countValue < _lossDelayValue)
+            {
+                _countValue += Time.fixedDeltaTime * _incValue;
+                OnLossCounterChange();
+                if (_countValue >= _lossDelayValue)
+                {
+                    _eventBus.Invoke(new GameOverSignal());
+                    Debug.LogWarning("You lose!");
+                }
+            }
+        }
+
+        private void DecLossCountValue()
+        {
+            if (_countValue > _minValue && _countValue < _lossDelayValue && !_losingDebug)
+            {
+                _countValue -= Time.fixedDeltaTime * _decValue;
+                OnLossCounterChange();
+                if (_countValue < _minValue)
+                    _countValue = _minValue;
+            }
         }
         #endregion
     }
