@@ -18,7 +18,7 @@ MonoBehaviour:
     <TierIncriminator>k__BackingField: 1
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 1
-    _canBeDropped: 1
+    _canBeDropped: 0
     <ScoreToDrop>k__BackingField: 0
     <ThresholdUnitImg>k__BackingField: {fileID: 0}
   - <Unit>k__BackingField: {fileID: 3222312306345545573, guid: 9c2ad7a835e105e48a9ad2ed750079f8, type: 3}
@@ -34,7 +34,7 @@ MonoBehaviour:
     <TierIncriminator>k__BackingField: 1
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 4
-    _canBeDropped: 1
+    _canBeDropped: 0
     <ScoreToDrop>k__BackingField: 20
     <ThresholdUnitImg>k__BackingField: {fileID: 4263049144482503142, guid: 0d5b424d814b24f4b89c230191d5aaeb, type: 3}
   - <Unit>k__BackingField: {fileID: 7360468067039774118, guid: b962dd74c40318d4685d4c2ebec098a5, type: 3}
@@ -82,7 +82,7 @@ MonoBehaviour:
     <TierIncriminator>k__BackingField: 1
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 256
-    _canBeDropped: 0
+    _canBeDropped: 1
     <ScoreToDrop>k__BackingField: 0
     <ThresholdUnitImg>k__BackingField: {fileID: 0}
   - <Unit>k__BackingField: {fileID: 7791461750959309905, guid: 6889778855115bc4ab18ec0ea7677777, type: 3}
