@@ -32,7 +32,7 @@ namespace CrystalProject.Game
             Container.QueueForInject(_unitController);
             Container.Bind<IUnitDispenser>().FromInstance(_unitController);
 
-            // Bind GameController
+            // Bind and inject GameController
             Container.Bind<GameController>().FromInstance(_gameController);
         }
     }
