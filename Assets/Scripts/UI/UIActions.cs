@@ -5,23 +5,17 @@ using CrystalProject.Score;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace CrystalProject.UI
 {
     public class UIActions : MonoBehaviour
     {
-        [Header("Buttons")]
-        [SerializeField] private Button _menuButton;
-        [SerializeField] private Button _returnButton;
-        [SerializeField] private Button[] _restartButtons;
-        [SerializeField] private Button _callPromtButton;
-        [SerializeField] private Button _okPromtButton;
         [Header("Rects")]
         [SerializeField] private RectTransform _gameOverTransform;
         [SerializeField] private RectTransform _menuTransform;
         [SerializeField] private RectTransform _promtTransform;
+        [SerializeField] private RectTransform _optionsTransform;
         [Header("Other")]
         [SerializeField] private TextMeshProUGUI _scoreValueText;
         [SerializeField] private float _timeScaleInMenu = 0;
@@ -42,19 +36,10 @@ namespace CrystalProject.UI
         #region MonoBeh //////////////////////////////////////////
         private void Awake()
         {
-            // Bind buttons
-            _menuButton.onClick.AddListener(OnMenuOpenClose);
-            _returnButton.onClick.AddListener(OnMenuOpenClose);
-            foreach (var button in _restartButtons)
-            {
-                button.onClick.AddListener(OnRestart);
-            }
-            _okPromtButton.onClick.AddListener(OnOpenClosePromt);
-            _callPromtButton.onClick.AddListener(OnOpenClosePromt);
-
             // Disable/Active UI elements
             _gameOverTransform.gameObject.SetActive(false);
             _menuTransform.gameObject.SetActive(false);
+            _optionsTransform.gameObject.SetActive(false);
 
             // Other events
             _eventBus.Subscribe<GameOverSignal>(OnGameOver);
@@ -63,15 +48,8 @@ namespace CrystalProject.UI
 
         private void OnDestroy()
         {
-            // UnBind buttons
-            _menuButton.onClick.RemoveListener(OnMenuOpenClose);
-            _returnButton.onClick.RemoveListener(OnMenuOpenClose);
-            _okPromtButton.onClick.RemoveListener(OnOpenClosePromt);
-            _callPromtButton.onClick.RemoveListener(OnOpenClosePromt);
-            foreach (var button in _restartButtons)
-            {
-                button.onClick.RemoveListener(OnRestart);
-            }
+            _eventBus.Unsubscribe<GameOverSignal>(OnGameOver);
+            _eventBus.Unsubscribe<FirstGameStartSignal>(OnFirstGameStart);
         }
         #endregion
 
@@ -89,12 +67,12 @@ namespace CrystalProject.UI
         }
 
 
-        private void OnMenuOpenClose()
+        public void OnMenuOpenClose()
         {
             StartCoroutine(IEnumOnMenuOpenClose());
         }
 
-        private void OnOpenClosePromt()
+        public void OnOpenClosePromt()
         {
             if (!_promtTransform.gameObject.activeInHierarchy)
             {
@@ -104,10 +82,21 @@ namespace CrystalProject.UI
             {
                 StartCoroutine(IEnumOnClosePromt());
             }
-
         }
 
-        private IEnumerator IEnumOnMenuOpenClose()
+        public void OnOpenCloseOptions()
+        {
+            if (!_optionsTransform.gameObject.activeInHierarchy)
+            {
+                _optionsTransform.gameObject.SetActive(true);
+            }
+            else
+            {
+                _optionsTransform.gameObject.SetActive(false);
+            }
+        }
+
+        public IEnumerator IEnumOnMenuOpenClose()
         {
             if (!_menuTransform.gameObject.activeInHierarchy)
             {
@@ -128,7 +117,7 @@ namespace CrystalProject.UI
             _promtTransform.gameObject.SetActive(false);
         }
 
-        private void OnRestart()
+        public void OnRestart()
         {
             _gameController.RestartGame();
             Time.timeScale = _defalultTimeScale;

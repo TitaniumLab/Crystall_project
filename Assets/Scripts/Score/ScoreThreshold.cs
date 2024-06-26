@@ -1,4 +1,6 @@
 using CrystalProject.Dropper;
+using CrystalProject.EventBus;
+using CrystalProject.EventBus.Signals;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +31,8 @@ namespace CrystalProject.Score
         private int _maxScore = 0;
         private int _minScore = 0;
         private List<ScoreThresholdForAnimation> _scoreThresAnims;
+        private Tween _tween;
+        private CustomEventBus _customEventBus;
 
         /// <summary>
         /// Contains info about each threshold point
@@ -50,10 +54,11 @@ namespace CrystalProject.Score
         }
 
         [Inject] // Dependency injection
-        private void Construct(IDropData[] data, IScoreThresholdImages[] unitImg)
+        private void Construct(IDropData[] data, IScoreThresholdImages[] unitImg, CustomEventBus customEventBus)
         {
             _data = data;
             _unitImg = unitImg;
+            _customEventBus = customEventBus;
         }
 
         private void Awake()
@@ -113,6 +118,7 @@ namespace CrystalProject.Score
         private void OnDestroy()
         {
             _slider.onValueChanged.RemoveListener(delegate { OnScoreChange(); });
+            _tween?.Kill();
         }
 
         public void SetSliderValue(float value)
@@ -126,6 +132,7 @@ namespace CrystalProject.Score
             {
                 if (!_scoreThresAnims[i].AnimPlayed && _slider.value >= _scoreThresAnims[i].ScoreThreshold)
                 {
+                    _tween?.Kill();
                     _particleSystem.transform.position = _scoreThresAnims[i].GameUnitImg.rectTransform.position;
                     _particleSystem.Play();
                     var seq = DOTween.Sequence();
@@ -133,7 +140,10 @@ namespace CrystalProject.Score
                     Vector3 size = rT.localScale;
                     seq.Append(rT.DOScale(size * _shakeSize, _imgShakeDur / 2).SetEase(Ease.OutBounce));
                     seq.Append(rT.DOScale(size, _imgShakeDur / 2).SetEase(Ease.InBounce));
+                    _tween = seq;
                     _scoreThresAnims[i].AnimPlayed = true;
+
+                    _customEventBus.Invoke(new ScoreThresholdSignal());
                 }
             }
         }

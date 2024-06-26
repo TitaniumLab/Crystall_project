@@ -15,7 +15,6 @@ namespace CrystalProject.Combine
         private ICombineData[] _data;
         private CombineView _view;
 
-
         [Inject]
         private void Construct(CustomEventBus eventBus, ICombineData[] combineDatas, IUnitDispenser unitDispenser)
         {
@@ -28,15 +27,15 @@ namespace CrystalProject.Combine
         {
             if (!TryGetComponent(out _view))
                 Debug.LogError($"Missing {typeof(CombineView)} component.");
-            _eventBus.Subscribe<CombineSignal>(OnCombine);
+            _eventBus.Subscribe<CombineSignal>(OnCombineSignal);
         }
 
         private void OnDestroy()
         {
-            _eventBus.Unsubscribe<CombineSignal>(OnCombine);
+            _eventBus.Unsubscribe<CombineSignal>(OnCombineSignal);
         }
 
-        private void OnCombine(CombineSignal signal)
+        private void OnCombineSignal(CombineSignal signal)
         {
             // Get and set new unit
             int curTier = signal.CombinedUnitTier;

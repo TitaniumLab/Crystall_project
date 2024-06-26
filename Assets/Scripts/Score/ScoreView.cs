@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace CrystalProject.Score
 {
@@ -15,7 +14,5 @@ namespace CrystalProject.Score
             _scoreTextMeshPro.text = _scoreText + score;
             _scoreThreshold.SetSliderValue(score);
         }
-
-
     }
 }
