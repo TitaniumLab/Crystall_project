@@ -17,6 +17,7 @@ namespace CrystalProject.Audio
         public CustomEventBus CustomEventBus { get; private set; }
         public float SFXValume { get => _sfxValume; }
         public float MusicValume { get => _musicValume; }
+        public Slider SFXSlider { get => _sfxVolumeSlider; }
 
         public event Action OnMusicVolumeChange;
         public event Action OnSceneChangeStart;

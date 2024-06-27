@@ -16,6 +16,7 @@ namespace CrystalProject.UI
         [SerializeField] private RectTransform _menuTransform;
         [SerializeField] private RectTransform _promtTransform;
         [SerializeField] private RectTransform _optionsTransform;
+        [SerializeField] private RectTransform _aboutTransform;
         [Header("Other")]
         [SerializeField] private TextMeshProUGUI _scoreValueText;
         [SerializeField] private float _timeScaleInMenu = 0;
@@ -40,6 +41,7 @@ namespace CrystalProject.UI
             _gameOverTransform.gameObject.SetActive(false);
             _menuTransform.gameObject.SetActive(false);
             _optionsTransform.gameObject.SetActive(false);
+            _aboutTransform.gameObject.SetActive(false);
 
             // Other events
             _eventBus.Subscribe<GameOverSignal>(OnGameOver);
@@ -70,6 +72,18 @@ namespace CrystalProject.UI
         public void OnMenuOpenClose()
         {
             StartCoroutine(IEnumOnMenuOpenClose());
+        }
+
+        public void OnAboutOpenClose()
+        {
+            if (!_aboutTransform.gameObject.activeInHierarchy)
+            {
+                _aboutTransform.gameObject.SetActive(true);
+            }
+            else
+            {
+                _aboutTransform.gameObject.SetActive(false);
+            }
         }
 
         public void OnOpenClosePromt()

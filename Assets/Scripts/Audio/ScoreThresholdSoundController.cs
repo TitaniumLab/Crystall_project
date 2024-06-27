@@ -6,6 +6,7 @@ namespace CrystalProject.Audio
     [RequireComponent(typeof(AudioSource))]
     public class ScoreThresholdSoundController : MonoBehaviour
     {
+        private static ScoreThresholdSoundController s_instance;
         [SerializeField] private AudioClip _clip;
         [SerializeField] private float _volumeMulti = 1f;
         private AudioSettings _settings;
@@ -14,6 +15,12 @@ namespace CrystalProject.Audio
 
         private void Awake()
         {
+            if (s_instance is not null)
+            {
+                return;
+            }
+            s_instance = this;
+
             _settings = transform.root.GetComponentInParent<AudioSettings>();
             _audioSource = GetComponent<AudioSource>();
             if (!transform.root.TryGetComponent(out _settings))
@@ -29,8 +36,11 @@ namespace CrystalProject.Audio
         private void OnDestroy()
         {
             OnUnsubscribe();
-            _settings.OnSceneChangeStart -= OnUnsubscribe;
-            _settings.OnSceneChangeEnd -= OnSubscribe;
+            if (_settings is not null)
+            {
+                _settings.OnSceneChangeStart -= OnUnsubscribe;
+                _settings.OnSceneChangeEnd -= OnSubscribe;
+            }
         }
 
 
@@ -44,7 +54,7 @@ namespace CrystalProject.Audio
 
         private void OnUnsubscribe()
         {
-            _settings.CustomEventBus.Unsubscribe<ScoreThresholdSignal>(PlayClip);
+            _settings?.CustomEventBus.Unsubscribe<ScoreThresholdSignal>(PlayClip);
         }
 
 

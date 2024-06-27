@@ -4238,8 +4238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad3f3f4cbdd1854a95c705bdc4b774c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sfxValume: 0.574
-  _musicValume: 0.614
+  _sfxValume: 1
+  _musicValume: 1
   _sfxVolumeSlider: {fileID: 838420939}
   _musicVolumeSlider: {fileID: 288942058}
 --- !u!4 &809984984
@@ -4301,6 +4301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 838420940}
   - component: {fileID: 838420939}
+  - component: {fileID: 838420941}
   m_Layer: 5
   m_Name: SfxValueSlider
   m_TagString: Untagged
@@ -4382,6 +4383,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 14.29}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &838420941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838420938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd5c084fe93cd0647aff364f7c25b5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &842031893
 GameObject:
   m_ObjectHideFlags: 0
@@ -8291,7 +8304,7 @@ GameObject:
   - component: {fileID: 1788997028}
   - component: {fileID: 1788997027}
   m_Layer: 5
-  m_Name: PromtWindow
+  m_Name: OptionsWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9100,7 +9113,7 @@ GameObject:
   - component: {fileID: 1940167792}
   - component: {fileID: 1940167791}
   m_Layer: 5
-  m_Name: HowToPlayText
+  m_Name: OptionsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9337,6 +9350,9 @@ MonoBehaviour:
   _nextSoundWaiting: 0.7
   _volumeMulti: 0.5
   _soundCount: 0
+  _soundIndexOnCheck: 0
+  _slider: {fileID: 838420939}
+  count: 0
 --- !u!82 &1991600635
 AudioSource:
   m_ObjectHideFlags: 0

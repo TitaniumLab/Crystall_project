@@ -5,6 +5,7 @@ namespace CrystalProject.Audio
     [RequireComponent(typeof(AudioSource))]
     public class MusicPlayer : MonoBehaviour
     {
+        private static MusicPlayer s_instance;
         [SerializeField] private AudioClip[] _clips;
         [SerializeField] private float _volumeMulti = 1;
         [SerializeField] private int _trackCount;
@@ -14,18 +15,29 @@ namespace CrystalProject.Audio
 
         private void Awake()
         {
+            if (s_instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            s_instance = this;
+
             _audioSource = GetComponent<AudioSource>();
             if (!transform.root.TryGetComponent(out _audioSettings))
                 Debug.LogError($"Missing {typeof(AudioSettings)} component.");
 
             _audioSettings.OnMusicVolumeChange += ChangeVolume;
+            RandomFirstTrack();
             PlayNextTrack();
         }
 
+
         private void OnDestroy()
         {
-            _audioSettings.OnMusicVolumeChange += ChangeVolume;
+            if (_audioSettings is not null)
+                _audioSettings.OnMusicVolumeChange += ChangeVolume;
         }
+
 
         private void PlayNextTrack()
         {
@@ -34,9 +46,13 @@ namespace CrystalProject.Audio
             _audioSource.volume = _audioSettings.MusicValume * _volumeMulti;
             _audioSource.Play();
             _nextTrackTime = Time.time + _clips[nextTrack].length;
-            Debug.LogWarning(_nextTrackTime);
             Invoke(nameof(PlayNextTrack), _nextTrackTime);
             _trackCount++;
+        }
+
+        private void RandomFirstTrack()
+        {
+            _trackCount = Random.Range(0, _clips.Length);
         }
 
         private void ChangeVolume()
