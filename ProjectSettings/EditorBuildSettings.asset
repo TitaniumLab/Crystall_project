@@ -6,6 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 436d3d408045a30449f92052eb2a2940
+  - enabled: 1
     path: Assets/Scenes/Exam Game - DropBalls.unity
     guid: ad92d12eb1efbaf46bb051261ed2e67d
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: cea2f0bb69f9baa4b8339213ec2c0c43, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 80a60a93f3b250f4d8e272c51738e568, type: 2}

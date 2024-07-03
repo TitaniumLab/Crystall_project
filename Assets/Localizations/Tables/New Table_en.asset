@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: New Table_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: dfc6acdf854948b45bcd5d59e2acfa68, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 20060340224
+    m_Localized: Return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 389729517568
+    m_Localized: Promt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 571628093440
+    m_Localized: Oprions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 659691700224
+    m_Localized: About
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273377108418560
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273450596818944
+    m_Localized: Sfx
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273567999582208
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273688606793728
+    m_Localized: How to play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280060081725440
+    m_Localized: 'Total score:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280475351375872
+    m_Localized: Game Over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280725659049984
+    m_Localized: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 311738640621568
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 368555831885824
+    m_Localized: Menu
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

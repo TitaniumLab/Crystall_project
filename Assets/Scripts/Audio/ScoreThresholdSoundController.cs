@@ -21,10 +21,8 @@ namespace CrystalProject.Audio
             }
             s_instance = this;
 
-            _settings = transform.root.GetComponentInParent<AudioSettings>();
+            _settings = transform.GetComponentInParent<AudioSettings>();
             _audioSource = GetComponent<AudioSource>();
-            if (!transform.root.TryGetComponent(out _settings))
-                Debug.LogError($"Missing {typeof(AudioSettings)} component.");
 
             _settings.OnSceneChangeStart += OnUnsubscribe;
             _settings.OnSceneChangeEnd += OnSubscribe;
@@ -54,13 +52,13 @@ namespace CrystalProject.Audio
 
         private void OnUnsubscribe()
         {
-            _settings?.CustomEventBus.Unsubscribe<ScoreThresholdSignal>(PlayClip);
+            _settings?.CustomEventBus?.Unsubscribe<ScoreThresholdSignal>(PlayClip);
         }
 
 
         private void OnSubscribe()
         {
-            _settings.CustomEventBus.Subscribe<ScoreThresholdSignal>(PlayClip);
+            _settings.CustomEventBus?.Subscribe<ScoreThresholdSignal>(PlayClip);
         }
     }
 }

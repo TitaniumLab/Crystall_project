@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CrystalProject.Audio
 {
@@ -9,7 +9,6 @@ namespace CrystalProject.Audio
         [SerializeField] private AudioClip[] _clips;
         [SerializeField] private float _volumeMulti = 1;
         [SerializeField] private int _trackCount;
-        private float _nextTrackTime;
         private AudioSource _audioSource;
         private AudioSettings _audioSettings;
 
@@ -23,8 +22,7 @@ namespace CrystalProject.Audio
             s_instance = this;
 
             _audioSource = GetComponent<AudioSource>();
-            if (!transform.root.TryGetComponent(out _audioSettings))
-                Debug.LogError($"Missing {typeof(AudioSettings)} component.");
+            _audioSettings = GetComponentInParent<AudioSettings>();
 
             _audioSettings.OnMusicVolumeChange += ChangeVolume;
             RandomFirstTrack();
@@ -35,7 +33,15 @@ namespace CrystalProject.Audio
         private void OnDestroy()
         {
             if (_audioSettings is not null)
-                _audioSettings.OnMusicVolumeChange += ChangeVolume;
+                _audioSettings.OnMusicVolumeChange -= ChangeVolume;
+        }
+
+        private void FixedUpdate()
+        {
+            if (_audioSource is not null && !_audioSource.isPlaying) // Why Audio end event doesnt exist? ¯\_(ツ)_/¯
+            {
+                PlayNextTrack();
+            }
         }
 
 
@@ -45,8 +51,6 @@ namespace CrystalProject.Audio
             _audioSource.clip = _clips[nextTrack];
             _audioSource.volume = _audioSettings.MusicValume * _volumeMulti;
             _audioSource.Play();
-            _nextTrackTime = Time.time + _clips[nextTrack].length;
-            Invoke(nameof(PlayNextTrack), _nextTrackTime);
             _trackCount++;
         }
 

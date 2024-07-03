@@ -31,8 +31,7 @@ namespace CrystalProject.Audio
             s_instance = this;
 
             _audioSource = GetComponent<AudioSource>();
-            if (!transform.root.TryGetComponent(out _settings))
-                Debug.LogError($"Missing {typeof(AudioSettings)} component.");
+            _settings = GetComponentInParent<AudioSettings>();
 
             _settings.OnSceneChangeStart += OnUnsubscribe;
             _settings.OnSceneChangeEnd += OnSubscribe;
@@ -74,13 +73,13 @@ namespace CrystalProject.Audio
 
         private void OnUnsubscribe()
         {
-            _settings?.CustomEventBus.Unsubscribe<CombineSignal>(PlaySound);
+            _settings?.CustomEventBus?.Unsubscribe<CombineSignal>(PlaySound);
         }
 
 
         private void OnSubscribe()
         {
-            _settings.CustomEventBus.Subscribe<CombineSignal>(PlaySound);
+            _settings?.CustomEventBus?.Subscribe<CombineSignal>(PlaySound);
             if (_settings.SFXSlider.TryGetComponent(out ISoundChecker component))
             {
                 component.SoundChecker = this;

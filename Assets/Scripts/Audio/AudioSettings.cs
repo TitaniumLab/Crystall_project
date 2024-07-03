@@ -44,7 +44,6 @@ namespace CrystalProject.Audio
             SetSliders();
             _sfxVolumeSlider.onValueChanged.AddListener(delegate { ChangeSFXVolume(); });
             _musicVolumeSlider.onValueChanged.AddListener(delegate { ChangeMusicVolume(); });
-            DontDestroyOnLoad(gameObject);
         }
 
 

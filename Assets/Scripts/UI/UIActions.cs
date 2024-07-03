@@ -1,10 +1,12 @@
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Game;
+using CrystalProject.Internal;
 using CrystalProject.Score;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace CrystalProject.UI
@@ -18,10 +20,14 @@ namespace CrystalProject.UI
         [SerializeField] private RectTransform _optionsTransform;
         [SerializeField] private RectTransform _aboutTransform;
         [Header("Other")]
+        [SerializeField] private int _mainMenuSceneInd = 0;
+        [SerializeField] private int _gameSceneIndex = 1;
         [SerializeField] private TextMeshProUGUI _scoreValueText;
         [SerializeField] private float _timeScaleInMenu = 0;
         [SerializeField] private float _defalultTimeScale = 1;
-
+        [SerializeField] private bool _enableAd = true;
+        [SerializeField, ConditionalHide(nameof(_enableAd)), Range(0, 1)] private float _restartAdChanse = 1;
+        [SerializeField, ConditionalHide(nameof(_enableAd)), Range(0, 1)] private float _menuAdChanse = 0.5f;
         private GameController _gameController;
         private CustomEventBus _eventBus;
         private IScore _score;
@@ -38,20 +44,24 @@ namespace CrystalProject.UI
         private void Awake()
         {
             // Disable/Active UI elements
-            _gameOverTransform.gameObject.SetActive(false);
-            _menuTransform.gameObject.SetActive(false);
-            _optionsTransform.gameObject.SetActive(false);
-            _aboutTransform.gameObject.SetActive(false);
+            if (_gameOverTransform)
+                _gameOverTransform.gameObject.SetActive(false);
+            if (_menuTransform)
+                _menuTransform.gameObject.SetActive(false);
+            if (_optionsTransform)
+                _optionsTransform.gameObject.SetActive(false);
+            if (_aboutTransform)
+                _aboutTransform.gameObject.SetActive(false);
 
             // Other events
-            _eventBus.Subscribe<GameOverSignal>(OnGameOver);
-            _eventBus.Subscribe<FirstGameStartSignal>(OnFirstGameStart);
+            _eventBus?.Subscribe<GameOverSignal>(OnGameOver);
+            _eventBus?.Subscribe<FirstGameStartSignal>(OnFirstGameStart);
         }
 
         private void OnDestroy()
         {
-            _eventBus.Unsubscribe<GameOverSignal>(OnGameOver);
-            _eventBus.Unsubscribe<FirstGameStartSignal>(OnFirstGameStart);
+            _eventBus?.Unsubscribe<GameOverSignal>(OnGameOver);
+            _eventBus?.Unsubscribe<FirstGameStartSignal>(OnFirstGameStart);
         }
         #endregion
 
@@ -66,6 +76,11 @@ namespace CrystalProject.UI
         {
             _scoreValueText.text = _score.Score.ToString();
             _gameOverTransform.gameObject.SetActive(true);
+        }
+
+        public void OnPlay()
+        {
+            SceneManager.LoadSceneAsync(_gameSceneIndex);
         }
 
 
@@ -133,8 +148,23 @@ namespace CrystalProject.UI
 
         public void OnRestart()
         {
+            if (_enableAd)
+            {
+                ShowAd.ShowAdWithChance(_restartAdChanse);
+            }
+
             _gameController.RestartGame();
             Time.timeScale = _defalultTimeScale;
+        }
+
+        public void ToMainMenu()
+        {
+            if (_enableAd)
+            {
+                ShowAd.ShowAdWithChance(_menuAdChanse);
+            }
+            Time.timeScale = _defalultTimeScale;
+            SceneManager.LoadSceneAsync(_mainMenuSceneInd);
         }
         #endregion
     }

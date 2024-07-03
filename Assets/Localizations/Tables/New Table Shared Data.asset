@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: New Table Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: New Table
+  m_TableCollectionNameGuidString: dfc6acdf854948b45bcd5d59e2acfa68
+  m_Entries:
+  - m_Id: 20060340224
+    m_Key: Return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 389729517568
+    m_Key: Promt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 571628093440
+    m_Key: Options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 659691700224
+    m_Key: About
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273377108418560
+    m_Key: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273450596818944
+    m_Key: Sfx
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273567999582208
+    m_Key: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273688606793728
+    m_Key: How to play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280060081725440
+    m_Key: 'Total score:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280475351375872
+    m_Key: Game Over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 280725659049984
+    m_Key: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 311738640621568
+    m_Key: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 368555831885824
+    m_Key: Menu
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 3226327813658771480
+  references:
+    version: 2
+    RefIds:
+    - rid: 3226327813658771480
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1719930617011
