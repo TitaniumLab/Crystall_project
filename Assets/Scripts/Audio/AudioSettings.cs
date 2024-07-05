@@ -2,6 +2,7 @@ using CrystalProject.EventBus;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 using Zenject;
 
 namespace CrystalProject.Audio
@@ -41,9 +42,18 @@ namespace CrystalProject.Audio
             }
 
             s_instance = this;
-            SetSliders();
+            // SetSliders();
             _sfxVolumeSlider.onValueChanged.AddListener(delegate { ChangeSFXVolume(); });
             _musicVolumeSlider.onValueChanged.AddListener(delegate { ChangeMusicVolume(); });
+        }
+
+
+        private void Start()
+        {
+            _sfxValume = YandexGame.savesData.SFXValue;
+            _musicValume = YandexGame.savesData.MusicValue;
+
+            SetSliders();
         }
 
 
@@ -89,6 +99,13 @@ namespace CrystalProject.Audio
         {
             _sfxVolumeSlider.value = _sfxValume;
             _musicVolumeSlider.value = _musicValume;
+        }
+
+        public void SaveAudio()
+        {
+            YandexGame.savesData.SFXValue = _sfxValume;
+            YandexGame.savesData.MusicValue = _musicValume;
+            YandexGame.SaveProgress();
         }
     }
 }

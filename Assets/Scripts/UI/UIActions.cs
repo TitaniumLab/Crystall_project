@@ -165,6 +165,10 @@ namespace CrystalProject.UI
                 ShowAd.ShowAdWithChance(_restartAdChanse);
             }
 
+            if (_loadingScreen)
+            {
+                _loadingScreen.gameObject.SetActive(true);
+            }
             _gameController.RestartGame();
             Time.timeScale = _defalultTimeScale;
         }
@@ -175,6 +179,7 @@ namespace CrystalProject.UI
             {
                 ShowAd.ShowAdWithChance(_menuAdChanse);
             }
+
             Time.timeScale = _defalultTimeScale;
 
             if (_loadingScreen)

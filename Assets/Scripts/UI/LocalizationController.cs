@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using YG;
 
 namespace CrystalProject.UI
 {
@@ -21,8 +22,19 @@ namespace CrystalProject.UI
             }
 
             s_instance = this;
+
+        }
+
+        private void Start()
+        {
+            _currentLocIndex = YandexGame.savesData.languageIndex;
             _localizationDropDown.onValueChanged.AddListener(ChangeLanguage);
-            _localizationDropDown.value = _currentLocIndex;
+
+            if (_localizationDropDown.value != _currentLocIndex)
+            {
+                _localizationDropDown.value = _currentLocIndex;
+                ChangeLanguage(_currentLocIndex);
+            }
         }
 
         private void SetInstance(TMP_Dropdown dropdown)
@@ -37,6 +49,12 @@ namespace CrystalProject.UI
         {
             _currentLocIndex = languageIndex;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndex];
+        }
+
+        public void SaveLanguage()
+        {
+            YandexGame.savesData.languageIndex = _currentLocIndex;
+            YandexGame.SaveProgress();
         }
     }
 }
