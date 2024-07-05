@@ -30,7 +30,6 @@ namespace CrystalProject
         public void SetCamera()
         {
             _previousRatio = (float)Screen.width / (float)Screen.height;
-            Debug.Log($"Current screen ratio: {_previousRatio}.");
 
             // If screen higher then target camera view
             if (_previousRatio < _maxTargetAspectRatio.x / _maxTargetAspectRatio.y)
@@ -66,8 +65,6 @@ namespace CrystalProject
             float relativeHViewSize = targetRatio.y / (targetRatio.x / _minHViewSize);
             float viewSize = (relativeHViewSize < _minViewSize) ? _minViewSize : relativeHViewSize;
             Camera.main.orthographicSize = viewSize;
-            Debug.Log($"New view size: {viewSize}.");
-
         }
     }
 }

@@ -19,6 +19,7 @@ namespace CrystalProject.UI
         [SerializeField] private RectTransform _promtTransform;
         [SerializeField] private RectTransform _optionsTransform;
         [SerializeField] private RectTransform _aboutTransform;
+        [SerializeField] private RectTransform _loadingScreen;
         [Header("Other")]
         [SerializeField] private int _mainMenuSceneInd = 0;
         [SerializeField] private int _gameSceneIndex = 1;
@@ -52,6 +53,8 @@ namespace CrystalProject.UI
                 _optionsTransform.gameObject.SetActive(false);
             if (_aboutTransform)
                 _aboutTransform.gameObject.SetActive(false);
+            if (_loadingScreen)
+                _loadingScreen.gameObject.SetActive(false);
 
             // Other events
             _eventBus?.Subscribe<GameOverSignal>(OnGameOver);
@@ -80,6 +83,10 @@ namespace CrystalProject.UI
 
         public void OnPlay()
         {
+            if (_loadingScreen)
+            {
+                _loadingScreen.gameObject.SetActive(true);
+            }
             SceneManager.LoadSceneAsync(_gameSceneIndex);
         }
 
@@ -99,6 +106,11 @@ namespace CrystalProject.UI
             {
                 _aboutTransform.gameObject.SetActive(false);
             }
+        }
+
+        public void OpenURL(string url)
+        {
+            Application.OpenURL(url);
         }
 
         public void OnOpenClosePromt()
@@ -164,9 +176,13 @@ namespace CrystalProject.UI
                 ShowAd.ShowAdWithChance(_menuAdChanse);
             }
             Time.timeScale = _defalultTimeScale;
+
+            if (_loadingScreen)
+            {
+                _loadingScreen.gameObject.SetActive(true);
+            }
             SceneManager.LoadSceneAsync(_mainMenuSceneInd);
         }
         #endregion
     }
 }
-
