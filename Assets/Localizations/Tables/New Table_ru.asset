@@ -70,6 +70,11 @@ MonoBehaviour:
     m_Localized: "\u041C\u0435\u043D\u044E"
     m_Metadata:
       m_Items: []
+  - m_Id: 2096039891861504
+    m_Localized: "\u041C\u043E\u0434\u0435\u043B\u0438:\nAurynSky\nClayManStudio\n\n\u041C\u0443\u0437\u044B\u043A\u0430:\nRizwan
+      Ashraf\n\n\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430:\nTitaniumLabGames\n"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
