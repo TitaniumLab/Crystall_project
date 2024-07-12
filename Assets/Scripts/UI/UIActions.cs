@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using static YG.InfoYG;
 
 namespace CrystalProject.UI
 {

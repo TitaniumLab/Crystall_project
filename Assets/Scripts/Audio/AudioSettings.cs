@@ -14,6 +14,7 @@ namespace CrystalProject.Audio
         [SerializeField, Range(0, 1f)] private float _musicValume = 1f;
         [SerializeField] private Slider _sfxVolumeSlider;
         [SerializeField] private Slider _musicVolumeSlider;
+        [SerializeField] private Button _optionsOk;
 
         public CustomEventBus CustomEventBus { get; private set; }
         public float SFXValume { get => _sfxValume; }
@@ -36,13 +37,14 @@ namespace CrystalProject.Audio
         {
             if (s_instance is not null)
             {
-                s_instance.InitPrevious(_sfxVolumeSlider, _musicVolumeSlider, CustomEventBus);
+                s_instance.InitPrevious(_sfxVolumeSlider, _musicVolumeSlider, CustomEventBus, _optionsOk);
                 Destroy(gameObject);
                 return;
             }
 
             s_instance = this;
-            // SetSliders();
+
+            _optionsOk.onClick.AddListener(SaveAudio);
             _sfxVolumeSlider.onValueChanged.AddListener(delegate { ChangeSFXVolume(); });
             _musicVolumeSlider.onValueChanged.AddListener(delegate { ChangeMusicVolume(); });
         }
@@ -69,6 +71,10 @@ namespace CrystalProject.Audio
             _sfxValume = _sfxVolumeSlider.value;
         }
 
+        private void OnApplicationPause(bool pause)
+        {
+            AudioListener.volume = pause ? 0 : 1;
+        }
 
         private void ChangeMusicVolume()
         {
@@ -77,17 +83,20 @@ namespace CrystalProject.Audio
         }
 
 
-        private void InitPrevious(Slider sfxSlider, Slider musicSlider, CustomEventBus customEventBus)
+        private void InitPrevious(Slider sfxSlider, Slider musicSlider, CustomEventBus customEventBus, Button okButton)
         {
             _sfxVolumeSlider.onValueChanged.RemoveListener(delegate { ChangeSFXVolume(); });
             _musicVolumeSlider.onValueChanged.RemoveListener(delegate { ChangeMusicVolume(); });
+            _optionsOk.onClick.RemoveListener(SaveAudio);
             OnSceneChangeStart?.Invoke();
 
+            _optionsOk = okButton;
             _sfxVolumeSlider = sfxSlider;
             _musicVolumeSlider = musicSlider;
             CustomEventBus = customEventBus;
             OnSceneChangeEnd?.Invoke();
 
+            _optionsOk.onClick.AddListener(SaveAudio);
             _sfxVolumeSlider.onValueChanged.AddListener(delegate { ChangeSFXVolume(); });
             _musicVolumeSlider.onValueChanged.AddListener(delegate { ChangeMusicVolume(); });
 

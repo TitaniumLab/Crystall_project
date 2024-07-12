@@ -17,9 +17,9 @@ namespace YG
         public bool[] openLevels = new bool[3];
 
         // Ваши сохранения
-        public float MusicValue = 0.5f;
-        public float SFXValue = 0.5f;
-        public int languageIndex = 1;
+        public float MusicValue = 1f;
+        public float SFXValue = 1f;
+        public int languageIndex = 0;
 
         // ...
 

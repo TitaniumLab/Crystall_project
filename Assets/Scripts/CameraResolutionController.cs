@@ -35,26 +35,16 @@ namespace CrystalProject
             if (_previousRatio < _maxTargetAspectRatio.x / _maxTargetAspectRatio.y)
             {
                 SetRelariveCameraViewSize(_maxTargetAspectRatio);
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP_8_1
                 float pixelScale = Screen.width / _maxTargetAspectRatio.x;
                 float targetHeight = pixelScale * _maxTargetAspectRatio.y;
                 float relativeHeight = targetHeight / Screen.height;
                 Vector2 rectSize = new Vector2(_defaultRectSize.x, relativeHeight);
                 Camera.main.rect = new Rect(default, rectSize) { center = _rectCenter };
-#endif
             }
             // If screen wider then target camera view
             else if (_previousRatio > _minTargetAspectRatio.x / _minTargetAspectRatio.y)
             {
                 SetRelariveCameraViewSize(_minTargetAspectRatio);
-
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP_8_1
-                float pixelScale = Screen.height / _minTargetAspectRatio.y;
-                float targetWidth = pixelScale * _minTargetAspectRatio.x;
-                float relativeWidth = targetWidth / Screen.width;
-                Vector2 rectSize = new Vector2(relativeWidth, _defaultRectSize.y);
-                Camera.main.rect = new Rect(default, rectSize) { center = _rectCenter };
-#endif
             }
             else
             {
