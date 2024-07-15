@@ -3647,7 +3647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &598568346
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7399,6 +7399,7 @@ MonoBehaviour:
   _enableAd: 1
   _restartAdChanse: 1
   _menuAdChanse: 1
+  _uiCloseDelay: 0.1
 --- !u!224 &1233104740 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2576958969442806618, guid: eb05c0d392fe3df468d4fe97d75085f4, type: 3}

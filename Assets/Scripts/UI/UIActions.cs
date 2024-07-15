@@ -4,11 +4,11 @@ using CrystalProject.Game;
 using CrystalProject.Internal;
 using CrystalProject.Score;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
-using static YG.InfoYG;
 
 namespace CrystalProject.UI
 {
@@ -30,6 +30,7 @@ namespace CrystalProject.UI
         [SerializeField] private bool _enableAd = true;
         [SerializeField, ConditionalHide(nameof(_enableAd)), Range(0, 1)] private float _restartAdChanse = 1;
         [SerializeField, ConditionalHide(nameof(_enableAd)), Range(0, 1)] private float _menuAdChanse = 0.5f;
+        [SerializeField] private float _uiSecDel = 0.1f; // for some reason waiting for end of frame doesn't prevent crystal drop when UI is closed on smartphones
         private GameController _gameController;
         private CustomEventBus _eventBus;
         private IScore _score;
@@ -97,6 +98,22 @@ namespace CrystalProject.UI
             StartCoroutine(IEnumOnMenuOpenClose());
         }
 
+        private IEnumerator IEnumOnMenuOpenClose()
+        {
+            if (!_menuTransform.gameObject.activeInHierarchy)
+            {
+                Time.timeScale = _timeScaleInMenu;
+                _menuTransform.gameObject.SetActive(true);
+            }
+            else
+            {
+                Time.timeScale = _defalultTimeScale;
+                yield return new WaitForSeconds(_uiSecDel);
+                _menuTransform.gameObject.SetActive(false);
+            }
+        }
+
+
         public void OnAboutOpenClose()
         {
             if (!_aboutTransform.gameObject.activeInHierarchy)
@@ -109,12 +126,19 @@ namespace CrystalProject.UI
             }
         }
 
+
         public void OpenURL(string url)
         {
             Application.OpenURL(url);
         }
 
+
         public void OnOpenClosePromt()
+        {
+            StartCoroutine(IEnumOnOpenClosePromt());
+        }
+
+        private IEnumerator IEnumOnOpenClosePromt()
         {
             if (!_promtTransform.gameObject.activeInHierarchy)
             {
@@ -122,7 +146,8 @@ namespace CrystalProject.UI
             }
             else
             {
-                StartCoroutine(IEnumOnClosePromt());
+                yield return new WaitForSeconds(_uiSecDel);
+                _promtTransform.gameObject.SetActive(false);
             }
         }
 
@@ -138,26 +163,6 @@ namespace CrystalProject.UI
             }
         }
 
-        public IEnumerator IEnumOnMenuOpenClose()
-        {
-            if (!_menuTransform.gameObject.activeInHierarchy)
-            {
-                Time.timeScale = _timeScaleInMenu;
-                _menuTransform.gameObject.SetActive(true);
-            }
-            else
-            {
-                yield return new WaitForEndOfFrame(); // Prevents actions when exiting the menu
-                Time.timeScale = _defalultTimeScale;
-                _menuTransform.gameObject.SetActive(false);
-            }
-        }
-
-        private IEnumerator IEnumOnClosePromt()
-        {
-            yield return new WaitForEndOfFrame(); // Prevents actions when exiting the menu
-            _promtTransform.gameObject.SetActive(false);
-        }
 
         public void OnRestart()
         {
