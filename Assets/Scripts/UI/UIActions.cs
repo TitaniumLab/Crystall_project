@@ -4,7 +4,6 @@ using CrystalProject.Game;
 using CrystalProject.Internal;
 using CrystalProject.Score;
 using System.Collections;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -146,7 +145,10 @@ namespace CrystalProject.UI
             }
             else
             {
-                yield return new WaitForSeconds(_uiSecDel);
+                if (Time.timeScale != 0)
+                {
+                    yield return new WaitForSeconds(_uiSecDel);
+                }
                 _promtTransform.gameObject.SetActive(false);
             }
         }

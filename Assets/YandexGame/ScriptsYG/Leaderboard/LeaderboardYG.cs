@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityToolbag;
 using YG.Utils.LB;
 using YG.Utils.Lang;
+using Unity.VisualScripting;
 
 namespace YG
 {
@@ -15,7 +16,7 @@ namespace YG
         public string nameLB;
 
         [Tooltip("Максимальное кол-во получаемых игроков")]
-        public int maxQuantityPlayers = 20;
+        public int maxQuantityPlayers = 1;
 
         [Tooltip("Кол-во получения верхних топ игроков")]
         [Range(1, 20)]
@@ -156,8 +157,19 @@ namespace YG
 
         private void SpawnPlayersList(LBData lb)
         {
-            players = new LBPlayerDataYG[lb.players.Length];
-            for (int i = 0; i < players.Length; i++)
+            int lenth = lb.players.Length < maxQuantityPlayers ? lb.players.Length : maxQuantityPlayers;
+            players = new LBPlayerDataYG[lenth];
+            int loopCount = 0;
+            if (lb.thisPlayer.rank > lenth)
+            {
+                loopCount = lenth - 1;
+            }
+            else
+            {
+                loopCount = lenth;
+            }
+
+            for (int i = 0; i < loopCount; i++)
             {
                 GameObject playerObj = Instantiate(playerDataPrefab, rootSpawnPlayersData);
 
@@ -186,36 +198,36 @@ namespace YG
                     players[i].data.thisPlayer = false;
                 }
 
-                if (timeTypeConvert)
+                players[i].data.score = lb.players[i].score.ToString();
+
+                players[i].UpdateEntries();
+            }
+
+            if (loopCount < lb.thisPlayer.rank)
+            {
+                GameObject playerObj = Instantiate(playerDataPrefab, rootSpawnPlayersData);
+
+                players[lenth - 1] = playerObj.GetComponent<LBPlayerDataYG>();
+
+                int rank = lb.thisPlayer.rank;
+
+                players[lenth - 1].data.name = LBMethods.AnonimName(YandexGame.playerName);
+                players[lenth - 1].data.rank = rank.ToString();
+
+                players[lenth - 1].data.thisPlayer = true;
+
+                if (rank <= quantityTop)
                 {
-                    string timeScore = TimeTypeConvert(lb.players[i].score);
-                    players[i].data.score = timeScore;
+                    players[lenth - 1].data.inTop = true;
                 }
                 else
                 {
-                    players[i].data.score = lb.players[i].score.ToString();
+                    players[lenth - 1].data.inTop = false;
                 }
 
-                if (playerPhoto != PlayerPhoto.NonePhoto)
-                {
-                    if (lb.players[i].photo == "nonePhoto")
-                    {
-                        if (isHiddenPlayerPhoto)
-                        {
-                            players[i].data.photoSprite = isHiddenPlayerPhoto;
-                        }
-                        else
-                        {
-                            players[i].data.photoUrl = null;
-                        }
-                    }
-                    else
-                    {
-                        players[i].data.photoUrl = lb.players[i].photo;
-                    }
-                }
 
-                players[i].UpdateEntries();
+                players[lenth - 1].data.score = lb.thisPlayer.score.ToString();
+                players[lenth - 1].UpdateEntries();
             }
         }
 

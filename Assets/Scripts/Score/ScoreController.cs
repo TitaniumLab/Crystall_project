@@ -52,6 +52,7 @@ namespace CrystalProject.Score
         private void OnGameOver(GameOverSignal gameOverSignal)
         {
             YandexGame.NewLeaderboardScores(_scoreBoardName, _scoreModel.Score);
+            Debug.Log($"Score saved: {_scoreModel.Score}");
         }
     }
 }

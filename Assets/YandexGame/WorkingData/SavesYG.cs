@@ -19,7 +19,7 @@ namespace YG
         // Ваши сохранения
         public float MusicValue = 1f;
         public float SFXValue = 1f;
-        public int languageIndex = 0;
+        public int languageIndex = 1;
 
         // ...
 
