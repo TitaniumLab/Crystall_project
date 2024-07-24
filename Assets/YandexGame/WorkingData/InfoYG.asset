@@ -73,7 +73,7 @@ MonoBehaviour:
       name: playerThis
       score: 40
       photo: https://justplaygames.ru/public/icon_player.png
-      uniqueID: 0001
+      uniqueID: 000
     - rank: 6
       name: player6
       score: 50
@@ -99,9 +99,14 @@ MonoBehaviour:
       score: 5055
       photo: https://justplaygames.ru/public/icon_player.png
       uniqueID: 32122
+    - rank: 10
+      name: player6555
+      score: 5055
+      photo: https://justplaygames.ru/public/icon_player.png
+      uniqueID: 32122
     thisPlayer:
-      rank: 1000
-      score: 546456
+      rank: 5
+      score: 20
   LocalizationEnable: 1
   callingLanguageCheck: 1
   translateMethod: 0

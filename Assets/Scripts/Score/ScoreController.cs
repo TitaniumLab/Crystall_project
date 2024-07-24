@@ -4,6 +4,7 @@ using Zenject;
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using YG;
+using YG.Utils.LB;
 
 namespace CrystalProject.Score
 {
@@ -11,6 +12,7 @@ namespace CrystalProject.Score
     public class ScoreController : MonoBehaviour
     {
         [SerializeField] private string _scoreBoardName = "Score";
+        private int _oldScore;
         private ScoreView _scoreView;
         private CustomEventBus _eventBus;
         private ScoreModel _scoreModel;
@@ -29,13 +31,22 @@ namespace CrystalProject.Score
             _eventBus.Subscribe<CombineSignal>(ScoreOnCombine);
             _eventBus.Subscribe<GameStartSignal>(OnGameStart);
             _eventBus.Subscribe<GameOverSignal>(OnGameOver);
+            YandexGame.onGetLeaderboard += OnUpdateLB;
         }
+
+
 
         private void OnDestroy()
         {
             _eventBus.Unsubscribe<CombineSignal>(ScoreOnCombine);
             _eventBus.Unsubscribe<GameStartSignal>(OnGameStart);
             _eventBus.Unsubscribe<GameOverSignal>(OnGameOver);
+            YandexGame.onGetLeaderboard -= OnUpdateLB;
+        }
+
+        private void OnUpdateLB(LBData data)
+        {
+            _oldScore = data.thisPlayer.score;
         }
 
         private void OnGameStart(GameStartSignal gameStartSignal)
@@ -51,8 +62,11 @@ namespace CrystalProject.Score
 
         private void OnGameOver(GameOverSignal gameOverSignal)
         {
-            YandexGame.NewLeaderboardScores(_scoreBoardName, _scoreModel.Score);
-            Debug.Log($"Score saved: {_scoreModel.Score}");
+            if (_scoreModel.Score > _oldScore)
+            {
+                YandexGame.NewLeaderboardScores(_scoreBoardName, _scoreModel.Score);
+                Debug.Log($"Score saved: {_scoreModel.Score}");
+            }
         }
     }
 }

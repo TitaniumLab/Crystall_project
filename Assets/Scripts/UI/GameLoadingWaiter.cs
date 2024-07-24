@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace CrystalProject.UI
 {
@@ -8,8 +10,7 @@ namespace CrystalProject.UI
         private static GameLoadingWaiter s_instance;
         private LocalizationController _localizationController;
         [SerializeField] private RectTransform _loadingRT;
-        [SerializeField] private bool _languageSet = false;
-        [SerializeField] private int _langWaitMSec = 1000;
+        [SerializeField] private float _langWaitSec = 1f;
 
         private void Awake()
         {
@@ -22,14 +23,8 @@ namespace CrystalProject.UI
 
             _localizationController = transform.root.GetComponentInChildren<LocalizationController>();
             _localizationController.OnLanguageSet += OnLanguageSet;
+            _loadingRT.gameObject.SetActive(true);
         }
-
-
-        private void Start()
-        {
-            WaitForLoading();
-        }
-
 
         private void OnDestroy()
         {
@@ -39,23 +34,15 @@ namespace CrystalProject.UI
             }
         }
 
-
-        private async void WaitForLoading()
+        private void OnLanguageSet()
         {
-            _loadingRT.gameObject.SetActive(true);
-            Debug.Log("Start loading.");
-            while (!_languageSet)
-            {
-                await Task.Yield();
-            }
-            Debug.Log("Language loaded.");
-            _loadingRT.gameObject.SetActive(false);
+            StartCoroutine(StartDelay());
         }
 
-        private async void OnLanguageSet()
+        private IEnumerator StartDelay()
         {
-            await Task.Delay(_langWaitMSec);
-            _languageSet = true;
+            yield return new WaitForSeconds(_langWaitSec);
+            _loadingRT.gameObject.SetActive(false);
         }
     }
 }

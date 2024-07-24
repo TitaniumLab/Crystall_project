@@ -199,19 +199,19 @@ namespace YG
 
         public void NewNameLB()
         {
-            leaderboard.leaderboardYG.nameLB = leaderboard.nameLbInputField.text;
+            leaderboard.leaderboardYG.NameLb = leaderboard.nameLbInputField.text;
             leaderboard.leaderboardYG.UpdateLB();
         }
 
         public void NewScoreLB()
         {
-            YandexGame.NewLeaderboardScores(leaderboard.leaderboardYG.nameLB,
+            YandexGame.NewLeaderboardScores(leaderboard.leaderboardYG.NameLb,
                 int.Parse(leaderboard.scoreLbInputField.text));
         }
 
         public void NewScoreLBTimeConvert()
         {
-            YandexGame.NewLBScoreTimeConvert(leaderboard.leaderboardYG.nameLB,
+            YandexGame.NewLBScoreTimeConvert(leaderboard.leaderboardYG.NameLb,
                 float.Parse(leaderboard.scoreLbInputField.text));
         }
     }

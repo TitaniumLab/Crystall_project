@@ -95,6 +95,22 @@ MonoBehaviour:
     m_Localized: Leaderboard
     m_Metadata:
       m_Items: []
+  - m_Id: 7931968627965952
+    m_Localized: Rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7932069215764480
+    m_Localized: Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7932139776540672
+    m_Localized: Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7940396641452032
+    m_Localized: 'Old record:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

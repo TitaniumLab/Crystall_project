@@ -20,10 +20,10 @@ namespace CrystalProject.UI
         [SerializeField] private RectTransform _optionsTransform;
         [SerializeField] private RectTransform _aboutTransform;
         [SerializeField] private RectTransform _loadingScreen;
+        [SerializeField] private RectTransform _leaderboardScreen;
         [Header("Other")]
         [SerializeField] private int _mainMenuSceneInd = 0;
         [SerializeField] private int _gameSceneIndex = 1;
-        [SerializeField] private TextMeshProUGUI _scoreValueText;
         [SerializeField] private float _timeScaleInMenu = 0;
         [SerializeField] private float _defalultTimeScale = 1;
         [SerializeField] private bool _enableAd = true;
@@ -32,22 +32,18 @@ namespace CrystalProject.UI
         [SerializeField] private float _uiSecDel = 0.1f; // for some reason waiting for end of frame doesn't prevent crystal drop when UI is closed on smartphones
         private GameController _gameController;
         private CustomEventBus _eventBus;
-        private IScore _score;
 
         [Inject]
         private void Construct(GameController gameController, CustomEventBus eventBus, IScore score)
         {
             _gameController = gameController;
             _eventBus = eventBus;
-            _score = score;
         }
 
         #region MonoBeh //////////////////////////////////////////
         private void Awake()
         {
             // Disable/Active UI elements
-            if (_gameOverTransform)
-                _gameOverTransform.gameObject.SetActive(false);
             if (_menuTransform)
                 _menuTransform.gameObject.SetActive(false);
             if (_optionsTransform)
@@ -56,11 +52,15 @@ namespace CrystalProject.UI
                 _aboutTransform.gameObject.SetActive(false);
             if (_loadingScreen)
                 _loadingScreen.gameObject.SetActive(false);
+            if (_leaderboardScreen)
+                _leaderboardScreen.gameObject.SetActive(false);
+
 
             // Other events
             _eventBus?.Subscribe<GameOverSignal>(OnGameOver);
             _eventBus?.Subscribe<FirstGameStartSignal>(OnFirstGameStart);
         }
+
 
         private void OnDestroy()
         {
@@ -78,9 +78,11 @@ namespace CrystalProject.UI
 
         private void OnGameOver(GameOverSignal signal)
         {
-            _scoreValueText.text = _score.Score.ToString();
             _gameOverTransform.gameObject.SetActive(true);
         }
+
+
+
 
         public void OnPlay()
         {
@@ -135,6 +137,18 @@ namespace CrystalProject.UI
         public void OnOpenClosePromt()
         {
             StartCoroutine(IEnumOnOpenClosePromt());
+        }
+
+        public void OnOpenCloseLeaderboard()
+        {
+            if (!_leaderboardScreen.gameObject.activeInHierarchy)
+            {
+                _leaderboardScreen.gameObject.SetActive(true);
+            }
+            else
+            {
+                _leaderboardScreen.gameObject.SetActive(false);
+            }
         }
 
         private IEnumerator IEnumOnOpenClosePromt()
