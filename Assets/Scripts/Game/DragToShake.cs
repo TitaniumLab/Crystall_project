@@ -1,30 +1,46 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 namespace CrystalProject.Game
 {
+    [RequireComponent(typeof(RectTransform))]
     public class DragToShake : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private float _distance;
+        private RectTransform _rectTransform;
         public Action<Vector2> OnDirectionChanged;
+        public Action<Vector2> OnMoveStart;
+        public Action<Vector2> OnMoveEnd;
+        public Action OnCencel;
 
+        private void Awake()
+        {
+            _rectTransform = GetComponent<RectTransform>();
+        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            var pos = eventData.position;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform, pos, Camera.main, out Vector2 localPoint);
+            OnMoveStart?.Invoke(localPoint);
         }
 
         public void OnDrag(PointerEventData eventData)
-
         {
-            OnDirectionChanged?.Invoke(eventData.position - eventData.pressPosition);
+            var direction = eventData.position - eventData.pressPosition;
+            OnDirectionChanged?.Invoke(direction);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            _distance = (eventData.position - eventData.pressPosition).magnitude;
-            Debug.Log(_distance);
+            if (eventData.pointerCurrentRaycast.gameObject != gameObject)
+            {
+                OnCencel?.Invoke();
+            }
+            else
+            {
+                OnMoveEnd?.Invoke(eventData.position - eventData.pressPosition);
+            }
         }
     }
 }

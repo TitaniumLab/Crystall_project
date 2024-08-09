@@ -17,6 +17,7 @@ namespace CrystalProject.Score
         private CustomEventBus _eventBus;
         private ScoreModel _scoreModel;
 
+        #region Internal
         [Inject]
         private void Construct(CustomEventBus customEventBus, ScoreModel scoreModel)
         {
@@ -43,6 +44,7 @@ namespace CrystalProject.Score
             _eventBus.Unsubscribe<GameOverSignal>(OnGameOver);
             YandexGame.onGetLeaderboard -= OnUpdateLB;
         }
+        #endregion
 
         private void OnUpdateLB(LBData data)
         {
