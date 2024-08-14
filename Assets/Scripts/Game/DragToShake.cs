@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace CrystalProject.Game
+namespace CrystalProject.SpecialActions
 {
     [RequireComponent(typeof(RectTransform))]
     public class DragToShake : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler

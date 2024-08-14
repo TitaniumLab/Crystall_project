@@ -3,10 +3,12 @@ using CrystalProject.EventBus.Signals;
 using CrystalProject.Game;
 using CrystalProject.Internal;
 using CrystalProject.Score;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Zenject;
 
 namespace CrystalProject.UI
@@ -21,6 +23,14 @@ namespace CrystalProject.UI
         [SerializeField] private RectTransform _aboutTransform;
         [SerializeField] private RectTransform _loadingScreen;
         [SerializeField] private RectTransform _leaderboardScreen;
+
+        [Header("Special Actions")]
+        [SerializeField] private Button _okSpecialButton;
+        [SerializeField] private Button _cencelSpecialButton;
+        [SerializeField] private GameObject _mainMenuButton;
+        [SerializeField] private Button _shakeButton;
+        [SerializeField] private Button _deleteUnitButton;
+        [SerializeField] private TextMeshProUGUI _shakeAttemptsText;
         [Header("Other")]
         [SerializeField] private int _mainMenuSceneInd = 0;
         [SerializeField] private int _gameSceneIndex = 1;
@@ -209,6 +219,65 @@ namespace CrystalProject.UI
                 _loadingScreen.gameObject.SetActive(true);
             }
             SceneManager.LoadSceneAsync(_mainMenuSceneInd);
+        }
+        #endregion
+
+        #region SpecialActions
+        /// <summary>
+        /// Set active in hierarchy "OK" button
+        /// </summary>
+        /// <param name="isEnabled"></param>
+        /// <param name="action">Add listenet ot "OK" button</param>
+        public void EnableOkButton(bool isEnabled, Action action)
+        {
+            _okSpecialButton.gameObject.SetActive(isEnabled);
+            if (isEnabled)
+            {
+                _okSpecialButton.onClick.AddListener(() => action());
+            }
+            else
+            {
+                _okSpecialButton.onClick.RemoveAllListeners();
+            }
+        }
+
+        /// <summary>
+        /// Enable cencel button
+        /// </summary>
+        /// <param name="isEnabled"></param>
+        public void EnableCencelButton(bool isEnabled, Action action)
+        {
+            _cencelSpecialButton.gameObject.SetActive(isEnabled);
+            if (isEnabled)
+            {
+                _cencelSpecialButton.onClick.AddListener(() => action());
+            }
+            else
+            {
+                _cencelSpecialButton.onClick.RemoveListener(() => action());
+            }
+
+        }
+
+        /// <summary>
+        /// Enable all special action and menu buttons
+        /// </summary>
+        /// <param name="isEnabled"></param>
+        public void EnableMainUIButtons(bool isEnabled)
+        {
+            _mainMenuButton.SetActive(isEnabled);
+            _shakeButton.gameObject.SetActive(isEnabled);
+            _deleteUnitButton.gameObject.SetActive(isEnabled);
+        }
+
+        public void SetShakeButtonInteractable(bool isInteractable)
+        {
+            _shakeButton.interactable = isInteractable;
+        }
+
+        public void SetShakeAttemptsText(int currentAttempt, int maxAttempt)
+        {
+            _shakeAttemptsText.text = $"{currentAttempt}/{maxAttempt}";
         }
         #endregion
     }
