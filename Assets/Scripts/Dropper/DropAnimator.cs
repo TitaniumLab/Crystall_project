@@ -16,7 +16,9 @@ namespace CrystalProject.Dropper
         [SerializeField] private float _dropDelay = 0.1f;
         private Tween _tween;
         private bool _canBeMoved;
+        public bool CanBeMoved { get { return _canBeMoved; } }
         public event Action OnDropEnd;
+        public event Action<bool> OnAppearAnimating;
 
         private void OnDestroy()
         {
@@ -31,10 +33,12 @@ namespace CrystalProject.Dropper
         public async void AppearAnimation(Transform unitTransform, Vector3 appearPoint)
         {
             _canBeMoved = false;
+            OnAppearAnimating?.Invoke(false);
             unitTransform.position = appearPoint;
             Vector3 defaultSize = unitTransform.localScale;
             unitTransform.localScale = _appearStartSize;
             await (_tween = unitTransform.DOScale(defaultSize, _appearDuration).SetEase(Ease.OutBounce)).AsyncWaitForCompletion();
+            OnAppearAnimating?.Invoke(true);
             _canBeMoved = true;
         }
 

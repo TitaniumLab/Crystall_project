@@ -27,7 +27,7 @@ MonoBehaviour:
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 2
     _canBeDropped: 1
-    <ScoreToDrop>k__BackingField: 100
+    <ScoreToDrop>k__BackingField: 300
     <ThresholdUnitImg>k__BackingField: {fileID: 4263049144482503142, guid: c63d63da399be6048ba90cbc3fc6d7f4, type: 3}
   - <Unit>k__BackingField: {fileID: -3280630519862757541, guid: f66131de7e54e4d409b46e6c9edd5e28, type: 3}
     _canBeCombined: 1
@@ -35,7 +35,7 @@ MonoBehaviour:
     <CombineSound>k__BackingField: {fileID: 0}
     <ScoreOnCombine>k__BackingField: 4
     _canBeDropped: 1
-    <ScoreToDrop>k__BackingField: 800
+    <ScoreToDrop>k__BackingField: 1000
     <ThresholdUnitImg>k__BackingField: {fileID: 4263049144482503142, guid: 0d5b424d814b24f4b89c230191d5aaeb, type: 3}
   - <Unit>k__BackingField: {fileID: 7360468067039774118, guid: b962dd74c40318d4685d4c2ebec098a5, type: 3}
     _canBeCombined: 1

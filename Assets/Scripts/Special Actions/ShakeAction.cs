@@ -11,13 +11,13 @@ namespace CrystalProject.SpecialActions
     {
         [Header("Shake actions")]
         [SerializeField] private Transform _gameUnitsParent;
-        [SerializeField] private UIActions _uiActions;
+        [SerializeField] private UISpecialActions _uiActions;
         [SerializeField] private DropController _dropController;
         [SerializeField] private DragToShake _shakeBlockScreen;
         [SerializeField] private RectTransform _shakeDirectionImg;
         [SerializeField] private Image _shakePromtImg;
         [SerializeField] private Slider _shakePowerSlider;
-        [SerializeField] private float _maxShakePower = 1000;
+        [SerializeField] private float _maxShakePower = 5;
         [SerializeField] private float _shakePowerMultiplier = 1;
         [SerializeField] private int _currentAttempt = 0;
         [SerializeField] private int _maxAttempts = 1;
@@ -28,11 +28,9 @@ namespace CrystalProject.SpecialActions
         private void Awake()
         {
             _shakeBlockScreen.OnMoveStart += DragStart;
-            _shakeBlockScreen.OnDirectionChanged += DragChange;
+            _shakeBlockScreen.OnDirectionChanged += Dragging;
             _shakeBlockScreen.OnMoveEnd += DragStop;
             _shakeBlockScreen.OnCencel += DragCencel;
-
-
         }
 
         private void Start()
@@ -43,14 +41,13 @@ namespace CrystalProject.SpecialActions
         private void OnDestroy()
         {
             _shakeBlockScreen.OnMoveStart -= DragStart;
-            _shakeBlockScreen.OnDirectionChanged -= DragChange;
+            _shakeBlockScreen.OnDirectionChanged -= Dragging;
             _shakeBlockScreen.OnMoveEnd -= DragStop;
             _shakeBlockScreen.OnCencel -= DragCencel;
         }
         #endregion
 
-
-        #region UI elements
+        #region UI
         /// <summary>
         /// Preparing all UIe elements for action
         /// </summary>
@@ -80,12 +77,13 @@ namespace CrystalProject.SpecialActions
         }
 
 
-        public void OnShakeCencel()
+        private void OnShakeCencel()
         {
             EnableShakeElements(false);
             _shakeBlockScreen.gameObject.SetActive(false);
             _uiActions.EnableMainUIButtons(true);
             _uiActions.EnableCencelButton(false, OnShakeCencel);
+            _dropController.enabled = true;
         }
         #endregion
 
@@ -113,7 +111,7 @@ namespace CrystalProject.SpecialActions
         /// Action on dragging
         /// </summary>
         /// <param name="direction"></param>
-        private void DragChange(Vector2 direction)
+        private void Dragging(Vector2 direction, float power)
         {
             //arrow
             var scale = (direction.magnitude * _sizeScale) / _shakeDirectionImg.sizeDelta.y;
@@ -121,23 +119,23 @@ namespace CrystalProject.SpecialActions
             _shakeDirectionImg.up = direction;
 
             //slider
-            var power = direction.magnitude / _maxShakePower;
-            _shakePowerSlider.value = power;
+            float relativePower = power / _maxShakePower;
+            _shakePowerSlider.value = relativePower;
         }
 
         /// <summary>
         /// On dragging stop
         /// </summary>
         /// <param name="direction"></param>
-        private void DragStop(Vector2 direction)
+        private void DragStop(Vector2 direction, float power)
         {
             EnableShakeElements(false);
-            Vector3 power = direction.magnitude <= _maxShakePower ? direction : direction.normalized * _maxShakePower;
+            float impuelse = power <= _maxShakePower ? power : _maxShakePower;
             foreach (Transform gameUnit in _gameUnitsParent)
             {
                 if (gameUnit.TryGetComponent(out Rigidbody rb) && rb.useGravity)
                 {
-                    rb.AddForce(power * _shakePowerMultiplier, ForceMode.Impulse);
+                    rb.AddForce(direction.normalized * impuelse * _shakePowerMultiplier, ForceMode.Impulse);
                 }
             }
             _currentAttempt++;
@@ -152,7 +150,7 @@ namespace CrystalProject.SpecialActions
             _uiActions.EnableMainUIButtons(true);
             _uiActions.EnableCencelButton(false, OnShakeCencel);
             _shakeBlockScreen.gameObject.SetActive(false);
-            _dropController.enabled = true;
+            StartCoroutine(EnableDropperAfterDelay(0.1f));
         }
 
         /// <summary>
@@ -161,6 +159,12 @@ namespace CrystalProject.SpecialActions
         private void DragCencel()
         {
             EnableShakeElements(false);
+        }
+
+        private IEnumerator EnableDropperAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            _dropController.enabled = true;
         }
         #endregion
     }

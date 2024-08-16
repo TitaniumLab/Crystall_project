@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7296450094428358640}
   - component: {fileID: 7752720237262048043}
-  - component: {fileID: 2080640135264670785}
   - component: {fileID: 3861257932439851499}
+  - component: {fileID: 5226601771973259154}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -42,8 +42,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303441263180623724}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!135 &2080640135264670785
-SphereCollider:
+--- !u!114 &3861257932439851499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303441263180623724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e557362aad8af8046bca767586cfd766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!64 &5226601771973259154
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -60,21 +72,10 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5000003
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3861257932439851499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303441263180623724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e557362aad8af8046bca767586cfd766, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2189333729010039762
 GameObject:
   m_ObjectHideFlags: 0

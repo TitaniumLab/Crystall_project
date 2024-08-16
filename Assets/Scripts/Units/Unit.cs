@@ -11,9 +11,10 @@ namespace CrystalProject.Units
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    public class Unit : MonoBehaviour, ICombinable
+    public class Unit : MonoBehaviour, ICombinable, IPoolable
     {
         private int _unitTier;
+        public int UnitTier { get { return _unitTier; } }
         private CustomUnityPool _pool;
         private bool _canBeCombined;
         private CustomEventBus _eventBus;
@@ -74,6 +75,11 @@ namespace CrystalProject.Units
                 return true;
             }
             return false;
+        }
+
+        public void PoolIt()
+        {
+            _pool.Release(this);
         }
         #endregion
     }

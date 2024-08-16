@@ -1,6 +1,7 @@
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Score;
+using CrystalProject.Units;
 using CrystalProject.Units.Create;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace CrystalProject.Dropper
         private CustomEventBus _eventBus;
         private IUnitDispenser _unitDispenser;
         private IScore _score;
+        private bool _canDrop = true;
+        public bool CanDrop { get { return _canDrop; } set { _canDrop = value; } }
 
         #region MONOBEH ////////////////////////////////////////////////
         // Getting instances of classes and subscriptions
@@ -42,7 +45,7 @@ namespace CrystalProject.Dropper
         // Drop on button up
         private void Update()
         {
-            if (Input.GetMouseButtonUp(_mouseButtonIndex))
+            if (Input.GetMouseButtonUp(_mouseButtonIndex) && _canDrop)
             {
                 PointerEventData data = new(EventSystem.current) { position = Input.mousePosition };
                 List<RaycastResult> results = new List<RaycastResult>();
@@ -65,7 +68,7 @@ namespace CrystalProject.Dropper
         private void FixedUpdate()
         {
             // If button pressed and not on UI
-            if (Input.GetMouseButton(_mouseButtonIndex))
+            if (Input.GetMouseButton(_mouseButtonIndex) && _canDrop)
             {
                 PointerEventData data = new(EventSystem.current) { position = Input.mousePosition };
                 List<RaycastResult> results = new List<RaycastResult>();
@@ -111,12 +114,65 @@ namespace CrystalProject.Dropper
         /// </summary>
         private void GetNextUnit()
         {
-            _dropModel.CurUnitPreview?.DisablePreviewState();
             int tier = GetRandomUnitTier();
+            SetUnitOfTier(tier);
+        }
+
+        public void IncreaseUnitTier(int unitShift)
+        {
+            if (_dropAnimator.CanBeMoved)
+            {
+
+                int currentTier = GetCurrentTier();
+                PoolCurrentUnit();
+
+                int[] currentTiers = GetCurrentUnitTiers();
+                int index = 0;
+                for (int i = 0; i < currentTiers.Length; i++)
+                {
+                    if (currentTiers[i] == currentTier)
+                    {
+                        index = i;
+                        i = currentTiers.Length;
+                    }
+                }
+                int pseudoIndex = (index + unitShift) % currentTiers.Length;
+                int nextIndex = pseudoIndex >= 0 ? pseudoIndex : currentTiers.Length + pseudoIndex;
+                int nextTier = currentTiers[nextIndex];
+                SetUnitOfTier(nextTier);
+            }
+        }
+
+        public void SetUnitOfTier(int tier)
+        {
+            _dropModel.CurUnitPreview?.DisablePreviewState();
             _dropModel.SetNewUnit(_unitDispenser.GetUnit(tier).transform);
             _dropModel.CurUnitPreview.EnablePreviewState();
             _dropAnimator.AppearAnimation(_dropModel.CurUnitTransform, _dropModel.AppearPoint.position);
         }
+
+        public void PoolCurrentUnit()
+        {
+            if (_dropModel.CurUnitTransform.TryGetComponent(out Units.IPoolable unit))
+            {
+                unit.PoolIt();
+            }
+        }
+
+        public int GetCurrentTier()
+        {
+            int currentTier;
+            if (_dropModel.CurUnitTransform.TryGetComponent(out Unit unit))
+            {
+                currentTier = unit.UnitTier;
+            }
+            else
+            {
+                throw new Exception($"Missing {typeof(Unit)} component.");
+            }
+            return currentTier;
+        }
+
 
         /// <summary>
         /// Calculate final position for game unit.
@@ -133,12 +189,25 @@ namespace CrystalProject.Dropper
             return dropPoint;
         }
 
+
+
         /// <summary>
         /// Return available Tier.
         /// </summary>
         /// <returns>Tier</returns>
         /// <exception cref="Exception"></exception>
         private int GetRandomUnitTier()
+        {
+            var dropUnitTiers = GetCurrentUnitTiers();
+            int index;
+            if (dropUnitTiers.Length > 0)
+                index = Random.Range(0, dropUnitTiers.Length);
+            else
+                throw new Exception("Can't get game unit tier.");
+            return dropUnitTiers[index];
+        }
+
+        public int[] GetCurrentUnitTiers()
         {
             List<int> dropUnitTiers = new List<int>();
             for (int i = 0; i < _dropModel.DropData.Length; i++)
@@ -147,12 +216,7 @@ namespace CrystalProject.Dropper
                 if (data.CanBeDropped && _score.Score >= data.ScoreToDrop)
                     dropUnitTiers.Add(i);
             }
-            int index;
-            if (dropUnitTiers.Count > 0)
-                index = Random.Range(0, dropUnitTiers.Count);
-            else
-                throw new Exception("Can't get game unit tier.");
-            return dropUnitTiers[index];
+            return dropUnitTiers.ToArray();
         }
         #endregion
     }

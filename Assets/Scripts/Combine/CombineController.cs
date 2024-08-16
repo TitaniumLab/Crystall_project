@@ -1,7 +1,6 @@
 using CrystalProject.EventBus;
 using CrystalProject.EventBus.Signals;
 using CrystalProject.Units.Create;
-using System;
 using UnityEngine;
 using Zenject;
 
@@ -14,6 +13,7 @@ namespace CrystalProject.Combine
         private IUnitDispenser _dispenser;
         private ICombineData[] _data;
         private CombineView _view;
+        [SerializeField] private float _particleSizeMulty = 2;
 
         [Inject]
         private void Construct(CustomEventBus eventBus, ICombineData[] combineDatas, IUnitDispenser unitDispenser)
@@ -48,7 +48,7 @@ namespace CrystalProject.Combine
             Color color = Color.white;
             if (unit.TryGetComponent(out MeshRenderer mesh))
                 color = mesh.material.color;
-            _view.PlayParticles(midPos, unit.transform.localScale.y, color);
+            _view.PlayParticles(midPos, unit.transform.localScale.y * _particleSizeMulty, color);
         }
     }
 }
