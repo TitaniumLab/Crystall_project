@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using YG;
 using Zenject;
 
 namespace CrystalProject.UI
@@ -43,6 +44,7 @@ namespace CrystalProject.UI
         {
             yield return new WaitForSeconds(_langWaitSec);
             _loadingRT.gameObject.SetActive(false);
+            YandexGame.GameReadyAPI();
         }
     }
 }
